@@ -5,7 +5,7 @@ import React from "react";
 interface Lead {
   _id: string;
   clientName: string;
-  source: string;
+  source: "Direct" | "Fiverr";
   status: string;
   followUpNotes?: string;
   createdAt: string;

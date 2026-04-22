@@ -10,6 +10,11 @@ interface Lead {
   createdAt: string;
 }
 
+interface Project {
+  _id: string;
+  clientName: string;
+}
+
 interface Retainership {
   _id: string;
   price: number;
