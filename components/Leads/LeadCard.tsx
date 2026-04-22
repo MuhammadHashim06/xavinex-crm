@@ -65,7 +65,7 @@ const LeadCard: React.FC<LeadCardProps> = ({ lead, onStatusChange, onNotesChange
           </select>
         </div>
       </div>
-      <h4 className="font-bold text-white group-hover:text-accent transition-colors">{lead.clientName}</h4>
+      <h4 className="font-bold text-foreground group-hover:text-accent transition-colors">{lead.clientName}</h4>
       <p className="text-xs text-muted mt-1 italic">Added on {new Date(lead.createdAt).toLocaleDateString()}</p>
       
       {lead.status === "Follow Up" && (
@@ -89,7 +89,7 @@ const LeadCard: React.FC<LeadCardProps> = ({ lead, onStatusChange, onNotesChange
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Add description..."
-            className="w-full bg-background/50 border border-border rounded-lg p-2 text-xs text-zinc-300 focus:outline-none focus:border-accent min-h-[60px] resize-none"
+            className="w-full bg-background border border-border rounded-lg p-2 text-xs text-foreground focus:outline-none focus:border-accent min-h-[60px] resize-none shadow-sm"
           />
         </div>
       )}

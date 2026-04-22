@@ -14,7 +14,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center font-bold text-white">X</div>
-            <span className="text-xl font-bold tracking-tight text-white">XAVINEX <span className="text-accent">CRM</span></span>
+            <span className="text-xl font-bold tracking-tight text-foreground">XAVINEX <span className="text-accent">CRM</span></span>
           </div>
           <div className="flex space-x-1">
             {["Dashboard", "Leads", "Projects", "Retainerships"].map((tab) => (
@@ -24,7 +24,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                 className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                   activeTab === tab 
                     ? "bg-accent text-white shadow-lg shadow-accent/20" 
-                    : "text-muted hover:text-white hover:bg-white/5"
+                    : "text-muted hover:text-foreground hover:bg-accent/5"
                 }`}
               >
                 {tab}
