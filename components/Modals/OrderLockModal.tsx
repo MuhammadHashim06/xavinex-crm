@@ -8,7 +8,7 @@ interface OrderLockModalProps {
   isOpen: boolean;
   onClose: () => void;
   lead: { clientName: string } | null;
-  onSubmit: (data: { projectName: string; date: string; timeline: string; totalBudget: string; outstandingBalance: string }) => void;
+  onSubmit: (data: { projectName: string; startDate: string; endDate: string; totalBudget: string; outstandingBalance: string }) => void;
 }
 
 const OrderLockModal: React.FC<OrderLockModalProps> = ({ isOpen, onClose, lead, onSubmit }) => {
