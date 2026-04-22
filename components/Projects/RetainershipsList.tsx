@@ -38,7 +38,7 @@ const RetainershipsList: React.FC<RetainershipsListProps> = ({ retainerships, on
           <div className="bg-card border border-border rounded-2xl overflow-hidden overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
-                <tr className="bg-slate-50 border-b border-border">
+                <tr className="bg-white/5 border-b border-border">
                   <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Project</th>
                   <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Client</th>
                   <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Started</th>
@@ -49,22 +49,22 @@ const RetainershipsList: React.FC<RetainershipsListProps> = ({ retainerships, on
               </thead>
               <tbody className="divide-y divide-border">
                 {retainerships.map((r) => (
-                  <tr key={r._id} className="hover:bg-accent/5 transition-colors group">
+                  <tr key={r._id} className="hover:bg-white/[0.02] transition-colors group">
                     <td className="px-6 py-4">
                       <div className="flex flex-col">
-                        <span className="font-bold text-foreground group-hover:text-emerald-600 transition-colors">{r.projectName}</span>
+                        <span className="font-bold text-white group-hover:text-emerald-400 transition-colors">{r.projectName}</span>
                         <span className="text-[10px] text-muted">ID: {r._id.slice(-6)}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-md bg-emerald-500/20 flex items-center justify-center text-emerald-600 font-bold text-[10px]">{r.clientName[0]}</div>
-                        <span className="text-sm text-foreground">{r.clientName}</span>
+                        <div className="w-6 h-6 rounded-md bg-emerald-500/20 flex items-center justify-center text-emerald-500 font-bold text-[10px]">{r.clientName[0]}</div>
+                        <span className="text-sm text-zinc-300">{r.clientName}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-muted">{r.date}</td>
-                    <td className="px-6 py-4 text-sm text-emerald-600 font-medium">{r.duration}</td>
-                    <td className="px-6 py-4 font-bold text-foreground">${r.price}</td>
+                    <td className="px-6 py-4 text-sm text-zinc-400">{r.date}</td>
+                    <td className="px-6 py-4 text-sm text-emerald-500/80 font-medium">{r.duration}</td>
+                    <td className="px-6 py-4 font-bold text-white">${r.price}</td>
                     <td className="px-6 py-4">
                       <button 
                         onClick={() => { if(confirm("Are you sure?")) onDelete(r._id); }}

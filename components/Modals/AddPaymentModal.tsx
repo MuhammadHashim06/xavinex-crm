@@ -32,8 +32,8 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({ isOpen, onClose, proj
     <Modal isOpen={isOpen} onClose={onClose} title={`Record Payment: ${project?.projectName}`}>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="p-4 bg-accent/5 border border-accent/20 rounded-xl mb-4">
-          <p className="text-xs text-muted">Client: <span className="text-foreground font-bold">{project?.clientName}</span></p>
-          <p className="text-xs text-muted mt-1">Outstanding Balance: <span className="text-orange-600 font-bold">${project?.outstandingBalance}</span></p>
+          <p className="text-xs text-muted">Client: <span className="text-white font-bold">{project?.clientName}</span></p>
+          <p className="text-xs text-muted mt-1">Outstanding Balance: <span className="text-orange-400 font-bold">${project?.outstandingBalance}</span></p>
         </div>
 
         <div>
@@ -45,7 +45,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({ isOpen, onClose, proj
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             placeholder="0.00"
-            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-accent transition-colors"
+            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors"
           />
         </div>
 
@@ -56,7 +56,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({ isOpen, onClose, proj
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="e.g. Initial Deposit, Milestone 1"
-            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-accent transition-colors"
+            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors"
           />
         </div>
 

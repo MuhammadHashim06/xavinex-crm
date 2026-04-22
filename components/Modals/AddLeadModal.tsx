@@ -43,7 +43,7 @@ const AddLeadModal: React.FC<AddLeadModalProps> = ({ isOpen, onClose, onSubmit }
             value={formData.clientName}
             onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
             placeholder="e.g. John Doe"
-            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-accent transition-colors"
+            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors"
           />
         </div>
         <div>
@@ -57,7 +57,7 @@ const AddLeadModal: React.FC<AddLeadModalProps> = ({ isOpen, onClose, onSubmit }
                 className={`py-3 rounded-xl border font-bold transition-all ${
                   formData.source === s 
                     ? "bg-accent/10 border-accent text-accent shadow-inner" 
-                    : "bg-background border-border text-muted hover:border-accent"
+                    : "bg-background border-border text-muted hover:border-zinc-700"
                 }`}
               >
                 {s}
@@ -75,7 +75,7 @@ const AddLeadModal: React.FC<AddLeadModalProps> = ({ isOpen, onClose, onSubmit }
                 value={formData.whatsapp}
                 onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
                 placeholder="+1..."
-                className="w-full bg-background border border-border rounded-xl px-4 py-2 text-sm text-foreground focus:outline-none focus:border-accent"
+                className="w-full bg-background border border-border rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-accent"
               />
             </div>
             <div>
@@ -85,7 +85,7 @@ const AddLeadModal: React.FC<AddLeadModalProps> = ({ isOpen, onClose, onSubmit }
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="john@..."
-                className="w-full bg-background border border-border rounded-xl px-4 py-2 text-sm text-foreground focus:outline-none focus:border-accent"
+                className="w-full bg-background border border-border rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-accent"
               />
             </div>
           </div>
@@ -98,7 +98,7 @@ const AddLeadModal: React.FC<AddLeadModalProps> = ({ isOpen, onClose, onSubmit }
                 value={formData.fiverrUsername}
                 onChange={(e) => setFormData({ ...formData, fiverrUsername: e.target.value })}
                 placeholder="username"
-                className="w-full bg-background border border-border rounded-xl px-4 py-2 text-sm text-foreground focus:outline-none focus:border-accent"
+                className="w-full bg-background border border-border rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-accent"
               />
             </div>
             <div>
@@ -108,7 +108,7 @@ const AddLeadModal: React.FC<AddLeadModalProps> = ({ isOpen, onClose, onSubmit }
                 value={formData.orderId}
                 onChange={(e) => setFormData({ ...formData, orderId: e.target.value })}
                 placeholder="#FO..."
-                className="w-full bg-background border border-border rounded-xl px-4 py-2 text-sm text-foreground focus:outline-none focus:border-accent"
+                className="w-full bg-background border border-border rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-accent"
               />
             </div>
           </div>

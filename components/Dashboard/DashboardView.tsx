@@ -50,7 +50,7 @@ const DashboardView: React.FC<DashboardViewProps> = ({ leads, projects, retainer
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header>
-        <h1 className="text-3xl font-bold text-foreground">Welcome back, Admin</h1>
+        <h1 className="text-3xl font-bold text-white">Welcome back, Admin</h1>
         <p className="text-muted mt-1">Here's what's happening with Xavinex today.</p>
       </header>
       
@@ -67,20 +67,20 @@ const DashboardView: React.FC<DashboardViewProps> = ({ leads, projects, retainer
               <span className="text-xs font-medium text-muted">+12% from last month</span>
             </div>
             <h3 className="text-muted text-sm font-medium">{stat.label}</h3>
-            <p className="text-2xl font-bold text-foreground mt-1 group-hover:text-accent transition-colors">{stat.value}</p>
+            <p className="text-2xl font-bold text-white mt-1 group-hover:text-accent transition-colors">{stat.value}</p>
           </div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
          <div className="p-6 bg-card border border-border rounded-2xl">
-            <h3 className="text-lg font-bold text-foreground mb-4">Recent Activity</h3>
+            <h3 className="text-lg font-bold text-white mb-4">Recent Activity</h3>
             <div className="space-y-4">
               {leads.slice(0, 3).map((lead, i) => (
-                <div key={lead._id} className="flex items-center gap-4 p-3 rounded-xl hover:bg-accent/5 transition-colors border border-transparent hover:border-border">
+                <div key={lead._id} className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-border">
                   <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold">{lead.clientName[0]}</div>
                   <div>
-                    <p className="text-sm font-bold text-foreground">{lead.clientName}</p>
+                    <p className="text-sm font-bold text-white">{lead.clientName}</p>
                     <p className="text-xs text-muted">New lead added via {lead.source}</p>
                   </div>
                   <span className="ml-auto text-[10px] text-muted">{new Date(lead.createdAt).toLocaleDateString()}</span>
@@ -91,7 +91,7 @@ const DashboardView: React.FC<DashboardViewProps> = ({ leads, projects, retainer
          </div>
          <div className="p-6 bg-card border border-border rounded-2xl flex flex-col items-center justify-center text-center">
             <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center text-3xl mb-4">✨</div>
-            <h3 className="text-lg font-bold text-foreground mb-2">Grow your business</h3>
+            <h3 className="text-lg font-bold text-white mb-2">Grow your business</h3>
             <p className="text-muted text-sm mb-6 max-w-xs">Start by adding a new lead to your pipeline and track your progress.</p>
             <button 
               onClick={onAddLeadClick}

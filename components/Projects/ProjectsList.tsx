@@ -43,36 +43,36 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ projects, onStatusChange, o
           <div className="bg-card border border-border rounded-2xl overflow-hidden overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
-        <tr className="bg-slate-50 border-b border-border">
-          <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Project</th>
-          <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Client</th>
-          <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Start Date</th>
-          <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Timeline</th>
-          <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Total Budget</th>
-          <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Outstanding</th>
-          <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Status</th>
-          <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Actions</th>
-        </tr>
-      </thead>
-      <tbody className="divide-y divide-border">
-        {projects.map((project) => (
-          <tr key={project._id} className="hover:bg-accent/5 transition-colors group">
-            <td className="px-6 py-4">
-              <div className="flex flex-col">
-                <span className="font-bold text-foreground group-hover:text-accent transition-colors">{project.projectName || "N/A"}</span>
-                <span className="text-[10px] text-muted">{project._id.slice(-6)}</span>
-              </div>
-            </td>
-            <td className="px-6 py-4">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-md bg-accent/20 flex items-center justify-center text-accent font-bold text-[10px]">{project.clientName[0]}</div>
-                <span className="text-sm text-foreground">{project.clientName}</span>
-              </div>
-            </td>
-            <td className="px-6 py-4 text-sm text-muted">{project.date}</td>
-            <td className="px-6 py-4 text-sm text-muted">{project.timeline}</td>
-            <td className="px-6 py-4 font-bold text-foreground">${project.totalBudget}</td>
-            <td className="px-6 py-4 font-bold text-orange-600">${project.outstandingBalance}</td>
+                <tr className="bg-white/5 border-b border-border">
+                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Project</th>
+                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Client</th>
+                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Start Date</th>
+                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Timeline</th>
+                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Total Budget</th>
+                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Outstanding</th>
+                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {projects.map((project) => (
+                  <tr key={project._id} className="hover:bg-white/[0.02] transition-colors group">
+                    <td className="px-6 py-4">
+                      <div className="flex flex-col">
+                        <span className="font-bold text-white group-hover:text-accent transition-colors">{project.projectName || "N/A"}</span>
+                        <span className="text-[10px] text-muted">{project._id.slice(-6)}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-md bg-accent/20 flex items-center justify-center text-accent font-bold text-[10px]">{project.clientName[0]}</div>
+                        <span className="text-sm text-zinc-300">{project.clientName}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-zinc-400">{project.date}</td>
+                    <td className="px-6 py-4 text-sm text-zinc-400">{project.timeline}</td>
+                    <td className="px-6 py-4 font-bold text-white">${project.totalBudget}</td>
+                    <td className="px-6 py-4 font-bold text-orange-400">${project.outstandingBalance}</td>
                     <td className="px-6 py-4">
                       <select 
                         onChange={(e) => onStatusChange(project._id, e.target.value)}

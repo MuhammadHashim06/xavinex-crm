@@ -42,8 +42,8 @@ const ManualProjectModal: React.FC<ManualProjectModalProps> = ({ isOpen, onClose
             type="text" 
             value={formData.projectName}
             onChange={(e) => setFormData({ ...formData, projectName: e.target.value })}
-            placeholder="e.g. Website Development"
-            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-accent transition-colors"
+            placeholder="e.g. Website Redesign"
+            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors"
           />
         </div>
         <div>
@@ -53,20 +53,20 @@ const ManualProjectModal: React.FC<ManualProjectModalProps> = ({ isOpen, onClose
             type="text" 
             value={formData.clientName}
             onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
-            placeholder="e.g. Acme Corp"
-            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-accent transition-colors"
+            placeholder="e.g. John Doe"
+            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors"
           />
         </div>
         
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-[10px] font-bold text-muted uppercase mb-1.5">Start Date</label>
+            <label className="block text-[10px] font-bold text-muted uppercase mb-1.5">Date</label>
             <input 
               required
               type="date" 
               value={formData.date}
               onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-              className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-foreground text-sm focus:outline-none focus:border-accent"
+              className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-accent"
             />
           </div>
           <div>
@@ -74,37 +74,36 @@ const ManualProjectModal: React.FC<ManualProjectModalProps> = ({ isOpen, onClose
             <input 
               required
               type="text" 
-              placeholder="e.g. 2 Weeks"
+              placeholder="e.g. 2 weeks"
               value={formData.timeline}
               onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-              className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-foreground text-sm focus:outline-none focus:border-accent"
+              className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-accent"
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-[10px] font-bold text-muted uppercase mb-1.5">Total Budget ($)</label>
-            <input 
-              required
-              type="number" 
-              placeholder="0.00"
-              value={formData.totalBudget}
-              onChange={(e) => setFormData({ ...formData, totalBudget: e.target.value })}
-              className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-foreground text-sm focus:outline-none focus:border-accent"
-            />
-          </div>
-          <div>
-            <label className="block text-[10px] font-bold text-muted uppercase mb-1.5">Outstanding ($)</label>
-            <input 
-              required
-              type="number" 
-              placeholder="0.00"
-              value={formData.outstandingBalance}
-              onChange={(e) => setFormData({ ...formData, outstandingBalance: e.target.value })}
-              className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-foreground text-sm focus:outline-none focus:border-accent"
-            />
-          </div>
+        <div>
+          <label className="block text-[10px] font-bold text-muted uppercase mb-1.5">Total Budget ($)</label>
+          <input 
+            required
+            type="number" 
+            placeholder="0.00"
+            value={formData.totalBudget}
+            onChange={(e) => setFormData({ ...formData, totalBudget: e.target.value })}
+            className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-accent"
+          />
+        </div>
+
+        <div>
+          <label className="block text-[10px] font-bold text-muted uppercase mb-1.5">Outstanding Balance ($)</label>
+          <input 
+            required
+            type="number" 
+            placeholder="0.00"
+            value={formData.outstandingBalance}
+            onChange={(e) => setFormData({ ...formData, outstandingBalance: e.target.value })}
+            className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-accent"
+          />
         </div>
 
         <button type="submit" className="w-full bg-accent hover:bg-accent/90 text-white font-bold py-4 rounded-xl mt-4 transition-all glow-button">

@@ -42,7 +42,7 @@ const AddRetainershipModal: React.FC<AddRetainershipModalProps> = ({ isOpen, onC
             value={formData.projectName}
             onChange={(e) => setFormData({ ...formData, projectName: e.target.value })}
             placeholder="e.g. Social Media Management"
-            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-accent transition-colors"
+            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors"
           />
         </div>
         <div>
@@ -53,7 +53,7 @@ const AddRetainershipModal: React.FC<AddRetainershipModalProps> = ({ isOpen, onC
             value={formData.clientName}
             onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
             placeholder="e.g. Acme Corp"
-            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-accent transition-colors"
+            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors"
           />
         </div>
         <div className="grid grid-cols-2 gap-4">
@@ -65,7 +65,7 @@ const AddRetainershipModal: React.FC<AddRetainershipModalProps> = ({ isOpen, onC
               placeholder="e.g. 6 Months"
               value={formData.duration}
               onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-              className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-foreground text-sm focus:outline-none focus:border-accent"
+              className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-accent"
             />
           </div>
           <div>
@@ -76,7 +76,7 @@ const AddRetainershipModal: React.FC<AddRetainershipModalProps> = ({ isOpen, onC
               placeholder="0.00"
               value={formData.price}
               onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-              className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-foreground text-sm focus:outline-none focus:border-accent"
+              className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-accent"
             />
           </div>
         </div>
