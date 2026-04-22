@@ -3,8 +3,8 @@ import mongoose, { Schema, model, models } from "mongoose";
 const ProjectSchema = new Schema({
   projectName: { type: String, required: true },
   clientName: { type: String, required: true },
-  date: { type: String, required: true },
-  timeline: { type: String, required: true },
+  startDate: { type: Date, required: true },
+  endDate: { type: Date, required: true },
   totalBudget: { type: String, required: true },
   outstandingBalance: { type: String, required: true },
   status: { 

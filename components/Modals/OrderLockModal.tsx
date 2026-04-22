@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Modal from "../ui/Modal";
+import DateInput from "../ui/DateInput";
 
 interface OrderLockModalProps {
   isOpen: boolean;
@@ -13,8 +14,8 @@ interface OrderLockModalProps {
 const OrderLockModal: React.FC<OrderLockModalProps> = ({ isOpen, onClose, lead, onSubmit }) => {
   const [formData, setFormData] = useState({
     projectName: "",
-    date: new Date().toISOString().split("T")[0],
-    timeline: "",
+    startDate: new Date().toISOString().split("T")[0],
+    endDate: "",
     totalBudget: "",
     outstandingBalance: "",
   });
@@ -24,8 +25,8 @@ const OrderLockModal: React.FC<OrderLockModalProps> = ({ isOpen, onClose, lead, 
     onSubmit(formData);
     setFormData({
       projectName: "",
-      date: new Date().toISOString().split("T")[0],
-      timeline: "",
+      startDate: new Date().toISOString().split("T")[0],
+      endDate: "",
       totalBudget: "",
       outstandingBalance: "",
     });
@@ -36,28 +37,29 @@ const OrderLockModal: React.FC<OrderLockModalProps> = ({ isOpen, onClose, lead, 
       <form onSubmit={handleSubmit} className="space-y-4">
         <p className="text-xs text-muted mb-4">Confirming order for <span className="text-white font-bold">{lead?.clientName}</span>. This will move the lead to the Projects tab.</p>
         
+        <div>
+          <label className="block text-[10px] font-bold text-muted uppercase mb-1.5">Project Name</label>
+          <input 
+            required
+            type="text" 
+            placeholder="e.g. Website Development"
+            value={formData.projectName}
+            onChange={(e) => setFormData({ ...formData, projectName: e.target.value })}
+            className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-accent"
+          />
+        </div>
+
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-[10px] font-bold text-muted uppercase mb-1.5">Date</label>
-            <input 
-              required
-              type="date" 
-              value={formData.date}
-              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-              className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-accent"
-            />
-          </div>
-          <div>
-            <label className="block text-[10px] font-bold text-muted uppercase mb-1.5">Timeline</label>
-            <input 
-              required
-              type="text" 
-              placeholder="e.g. 2 weeks"
-              value={formData.timeline}
-              onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-              className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-accent"
-            />
-          </div>
+          <DateInput 
+            label="Start Date"
+            value={formData.startDate}
+            onChange={(val) => setFormData({ ...formData, startDate: val })}
+          />
+          <DateInput 
+            label="End Date"
+            value={formData.endDate}
+            onChange={(val) => setFormData({ ...formData, endDate: val })}
+          />
         </div>
 
         <div>

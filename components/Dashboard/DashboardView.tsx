@@ -64,7 +64,6 @@ const DashboardView: React.FC<DashboardViewProps> = ({ leads, projects, retainer
           <div key={i} className="p-6 bg-card border border-border rounded-2xl hover:border-accent/50 transition-colors group">
             <div className="flex items-center justify-between mb-4">
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl ${stat.color}`}>{stat.icon}</div>
-              <span className="text-xs font-medium text-muted">+12% from last month</span>
             </div>
             <h3 className="text-muted text-sm font-medium">{stat.label}</h3>
             <p className="text-2xl font-bold text-white mt-1 group-hover:text-accent transition-colors">{stat.value}</p>

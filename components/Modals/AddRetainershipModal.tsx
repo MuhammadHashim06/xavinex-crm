@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Modal from "../ui/Modal";
+import DateInput from "../ui/DateInput";
 
 interface AddRetainershipModalProps {
   isOpen: boolean;
@@ -13,7 +14,8 @@ const AddRetainershipModal: React.FC<AddRetainershipModalProps> = ({ isOpen, onC
   const [formData, setFormData] = useState({
     projectName: "",
     clientName: "",
-    duration: "",
+    startDate: new Date().toISOString().split("T")[0],
+    endDate: "",
     price: "",
   });
 
@@ -26,7 +28,8 @@ const AddRetainershipModal: React.FC<AddRetainershipModalProps> = ({ isOpen, onC
     setFormData({
       projectName: "",
       clientName: "",
-      duration: "",
+      startDate: new Date().toISOString().split("T")[0],
+      endDate: "",
       price: "",
     });
   };
@@ -57,28 +60,28 @@ const AddRetainershipModal: React.FC<AddRetainershipModalProps> = ({ isOpen, onC
           />
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-[10px] font-bold text-muted uppercase mb-1.5">Duration</label>
-            <input 
-              required
-              type="text" 
-              placeholder="e.g. 6 Months"
-              value={formData.duration}
-              onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-              className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-accent"
-            />
-          </div>
-          <div>
-            <label className="block text-[10px] font-bold text-muted uppercase mb-1.5">Price / Month ($)</label>
-            <input 
-              required
-              type="number" 
-              placeholder="0.00"
-              value={formData.price}
-              onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-              className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-accent"
-            />
-          </div>
+          <DateInput 
+            label="Start Date"
+            value={formData.startDate}
+            onChange={(val) => setFormData({ ...formData, startDate: val })}
+          />
+          <DateInput 
+            label="End Date"
+            value={formData.endDate}
+            onChange={(val) => setFormData({ ...formData, endDate: val })}
+          />
+        </div>
+
+        <div>
+          <label className="block text-[10px] font-bold text-muted uppercase mb-1.5">Price / Month ($)</label>
+          <input 
+            required
+            type="number" 
+            placeholder="0.00"
+            value={formData.price}
+            onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-accent transition-colors"
+          />
         </div>
 
         <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl mt-4 transition-all glow-button">

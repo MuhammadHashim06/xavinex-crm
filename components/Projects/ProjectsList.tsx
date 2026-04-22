@@ -6,8 +6,8 @@ interface Project {
   _id: string;
   projectName: string;
   clientName: string;
-  date: string;
-  timeline: string;
+  startDate: string;
+  endDate: string;
   totalBudget: string;
   outstandingBalance: string;
   status: string;
@@ -18,17 +18,39 @@ interface ProjectsListProps {
   onStatusChange: (id: string, status: string) => void;
   onAddProjectClick: () => void;
   onAddPaymentClick: (project: Project) => void;
+  onViewSummaryClick: (project: Project) => void;
+  onEditProjectClick: (project: Project) => void;
+  onDeleteProject: (id: string) => void;
 }
 
-const ProjectsList: React.FC<ProjectsListProps> = ({ projects, onStatusChange, onAddProjectClick, onAddPaymentClick }) => {
+const ProjectsList: React.FC<ProjectsListProps> = ({ projects, onStatusChange, onAddProjectClick, onAddPaymentClick, onViewSummaryClick, onEditProjectClick, onDeleteProject }) => {
   const statuses = ["In Progress", "Completed", "On Hold", "Cancelled"];
+
+  const calculateProgress = (start: string, end: string) => {
+    if (!start || !end) return 0;
+    const startDate = new Date(start).getTime();
+    const endDate = new Date(end).getTime();
+    const today = new Date().getTime();
+    
+    if (today < startDate) return 0;
+    if (today > endDate) return 100;
+    
+    const total = endDate - startDate;
+    const elapsed = today - startDate;
+    return Math.round((elapsed / total) * 100);
+  };
+
+  const activeProjects = projects.filter(p => p.status !== "Cancelled");
+  const totalBudget = activeProjects.reduce((sum, p) => sum + parseFloat(p.totalBudget || "0"), 0);
+  const totalOutstanding = activeProjects.reduce((sum, p) => sum + parseFloat(p.outstandingBalance || "0"), 0);
+  const totalCollected = totalBudget - totalOutstanding;
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex justify-between items-end">
         <div>
-          <h1 className="text-3xl font-bold text-white">Active Projects</h1>
-          <p className="text-muted">Tracking your confirmed orders and deliverables.</p>
+          <h1 className="text-3xl font-bold text-white">Project Pipeline</h1>
+          <p className="text-muted">Tracking your active orders and financial overview.</p>
         </div>
         <button 
           onClick={onAddProjectClick}
@@ -38,66 +60,119 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ projects, onStatusChange, o
         </button>
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {[
+          { label: "Active Pipeline", value: `$${totalBudget.toLocaleString()}`, color: "text-blue-500", bg: "bg-blue-500/10" },
+          { label: "Total Collected", value: `$${totalCollected.toLocaleString()}`, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+          { label: "Total Outstanding", value: `$${totalOutstanding.toLocaleString()}`, color: "text-orange-500", bg: "bg-orange-500/10" },
+        ].map((stat, i) => (
+          <div key={i} className="p-5 bg-card border border-border rounded-2xl">
+            <h3 className="text-muted text-[10px] font-bold uppercase tracking-wider mb-1">{stat.label}</h3>
+            <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+          </div>
+        ))}
+      </div>
+
       <div className="grid grid-cols-1 gap-4">
         {projects.length > 0 ? (
           <div className="bg-card border border-border rounded-2xl overflow-hidden overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
-                <tr className="bg-white/5 border-b border-border">
-                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Project</th>
-                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Client</th>
-                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Start Date</th>
-                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Timeline</th>
-                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Total Budget</th>
-                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Outstanding</th>
-                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider">Actions</th>
+                <tr className="bg-background/50 border-b border-border">
+                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider text-left">Project</th>
+                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider text-left">Client</th>
+                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider text-left">Timeline & Progress</th>
+                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider text-left">Budget</th>
+                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider text-left">Status</th>
+                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider text-left">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {projects.map((project) => (
-                  <tr key={project._id} className="hover:bg-white/[0.02] transition-colors group">
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col">
-                        <span className="font-bold text-white group-hover:text-accent transition-colors">{project.projectName || "N/A"}</span>
-                        <span className="text-[10px] text-muted">{project._id.slice(-6)}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-md bg-accent/20 flex items-center justify-center text-accent font-bold text-[10px]">{project.clientName[0]}</div>
-                        <span className="text-sm text-zinc-300">{project.clientName}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-zinc-400">{project.date}</td>
-                    <td className="px-6 py-4 text-sm text-zinc-400">{project.timeline}</td>
-                    <td className="px-6 py-4 font-bold text-white">${project.totalBudget}</td>
-                    <td className="px-6 py-4 font-bold text-orange-400">${project.outstandingBalance}</td>
-                    <td className="px-6 py-4">
-                      <select 
-                        onChange={(e) => onStatusChange(project._id, e.target.value)}
-                        value={project.status || "In Progress"}
-                        className={`text-[10px] font-bold px-2 py-1 rounded-full bg-background border border-border focus:outline-none focus:border-accent uppercase ${
-                          project.status === "Completed" ? "text-emerald-500" :
-                          project.status === "On Hold" ? "text-amber-500" :
-                          project.status === "Cancelled" ? "text-rose-500" : "text-blue-500"
-                        }`}
-                      >
-                        {statuses.map(s => (
-                          <option key={s} value={s}>{s}</option>
-                        ))}
-                      </select>
-                    </td>
-                    <td className="px-6 py-4">
-                      <button 
-                        onClick={() => onAddPaymentClick(project)}
-                        className="text-[10px] font-bold text-accent hover:underline flex items-center gap-1"
-                      >
-                        💰 Record Payment
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {projects.map((project) => {
+                  const progress = calculateProgress(project.startDate, project.endDate);
+                  return (
+                    <tr key={project._id} className="hover:bg-white/[0.02] transition-colors group">
+                      <td className="px-6 py-4">
+                        <button 
+                          onClick={() => onViewSummaryClick(project)}
+                          className="flex flex-col items-start text-left hover:text-accent transition-colors"
+                        >
+                          <span className="font-bold text-white group-hover:text-accent transition-colors">{project.projectName || "N/A"}</span>
+                          <span className="text-[10px] text-muted">{project._id.slice(-6)}</span>
+                        </button>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded-md bg-accent/20 flex items-center justify-center text-accent font-bold text-[10px]">{project.clientName[0]}</div>
+                          <span className="text-sm text-zinc-300">{project.clientName}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col gap-2 min-w-[150px]">
+                          <div className="flex justify-between text-[10px] font-bold">
+                            <span className="text-muted">{project.startDate ? new Date(project.startDate).toLocaleDateString() : "N/A"}</span>
+                            <span className="text-accent">{progress}%</span>
+                            <span className="text-muted">{project.endDate ? new Date(project.endDate).toLocaleDateString() : "N/A"}</span>
+                          </div>
+                          <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
+                            <div 
+                              className={`h-full transition-all duration-1000 rounded-full ${
+                                progress > 90 ? "bg-rose-500" : progress > 50 ? "bg-amber-500" : "bg-accent"
+                              }`}
+                              style={{ width: `${progress}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col">
+                          <span className="text-sm font-bold text-white">${project.totalBudget}</span>
+                          <span className="text-[10px] text-orange-400">Bal: ${project.outstandingBalance}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <select 
+                          onChange={(e) => onStatusChange(project._id, e.target.value)}
+                          value={project.status || "In Progress"}
+                          className={`text-[10px] font-bold px-2 py-1 rounded-full bg-background border border-border focus:outline-none focus:border-accent uppercase ${
+                            project.status === "Completed" ? "text-emerald-500" :
+                            project.status === "On Hold" ? "text-amber-500" :
+                            project.status === "Cancelled" ? "text-rose-500" : "text-blue-500"
+                          }`}
+                        >
+                          {statuses.map(s => (
+                            <option key={s} value={s}>{s}</option>
+                          ))}
+                        </select>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <button 
+                            onClick={() => onAddPaymentClick(project)}
+                            title="Record Payment"
+                            className="w-9 h-9 flex items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500 hover:text-white transition-all"
+                          >
+                            💰
+                          </button>
+                          <button 
+                            onClick={() => onEditProjectClick(project)}
+                            title="Edit Project"
+                            className="w-9 h-9 flex items-center justify-center rounded-xl bg-accent/10 text-accent hover:bg-accent hover:text-white transition-all"
+                          >
+                            ✏️
+                          </button>
+                          <button 
+                            onClick={() => { if(confirm("Are you sure?")) onDeleteProject(project._id); }}
+                            title="Delete Project"
+                            className="w-9 h-9 flex items-center justify-center rounded-xl bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
