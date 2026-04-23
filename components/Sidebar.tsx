@@ -9,7 +9,8 @@ import {
   Target, 
   Rocket, 
   RefreshCw, 
-  LogOut 
+  LogOut,
+  Wallet 
 } from "lucide-react";
 
 interface SidebarProps {}
@@ -23,6 +24,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
     { name: "Leads", icon: Target, href: "/leads" },
     { name: "Projects", icon: Rocket, href: "/projects" },
     { name: "Retainerships", icon: RefreshCw, href: "/retainerships" },
+    { name: "Wallet", icon: Wallet, href: "/wallet" },
   ];
 
   return (

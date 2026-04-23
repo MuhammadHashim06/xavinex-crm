@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 
 export default function LeadsPage() {
   const [leads, setLeads] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
   const [isOrderLockModalOpen, setIsOrderLockModalOpen] = useState(false);
   const [selectedLead, setSelectedLead] = useState<any>(null);
@@ -18,8 +19,10 @@ export default function LeadsPage() {
   }, []);
 
   const fetchLeads = async () => {
+    setLoading(true);
     const res = await fetch("/api/leads");
     setLeads(await res.json());
+    setLoading(false);
   };
 
   const updateLeadStatus = async (id: string, status: string) => {
@@ -31,11 +34,36 @@ export default function LeadsPage() {
     fetchLeads();
   };
 
-  const updateLeadNotes = async (id: string, notes: string) => {
+  const addFollowUp = async (id: string, note: string) => {
     await fetch(`/api/leads/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ followUpNotes: notes }),
+      body: JSON.stringify({ 
+        $push: { followUpHistory: { note, date: new Date() } } 
+      }),
+    });
+    fetchLeads();
+  };
+
+  const editFollowUp = async (leadId: string, entryId: string, note: string) => {
+    await fetch(`/api/leads/${leadId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        update: { $set: { "followUpHistory.$[elem].note": note } },
+        options: { arrayFilters: [{ "elem._id": entryId }] }
+      }),
+    });
+    fetchLeads();
+  };
+
+  const deleteFollowUp = async (leadId: string, entryId: string) => {
+    await fetch(`/api/leads/${leadId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        $pull: { followUpHistory: { _id: entryId } } 
+      }),
     });
     fetchLeads();
   };
@@ -79,9 +107,12 @@ export default function LeadsPage() {
     <>
       <LeadsPipeline 
         leads={leads} 
+        loading={loading}
         onAddLeadClick={() => setIsLeadModalOpen(true)}
         onStatusChange={updateLeadStatus}
-        onNotesChange={updateLeadNotes}
+        onAddFollowUp={addFollowUp}
+        onEditFollowUp={editFollowUp}
+        onDeleteFollowUp={deleteFollowUp}
         onDelete={handleDeleteLead}
         onOrderLock={(lead) => { setSelectedLead(lead); setIsOrderLockModalOpen(true); }}
       />

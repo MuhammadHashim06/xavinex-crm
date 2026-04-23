@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Payment from "@/models/Payment";
 import Project from "@/models/Project";
+import Wallet from "@/models/Wallet";
+import Transaction from "@/models/Transaction";
 
 export async function GET() {
   try {
@@ -16,7 +18,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     await connectDB();
-    const { projectId, amount, description } = await req.json();
+    const { projectId, amount, description, walletName } = await req.json();
 
     // 1. Find Project
     const project = await Project.findById(projectId);
@@ -29,11 +31,26 @@ export async function POST(req: Request) {
       projectId,
       clientName: project.clientName,
       amount,
-      description
+      description,
+      walletName
     });
 
-    // 3. Update Project Outstanding Balance
-    // We need to handle cases where outstandingBalance might be a string in some old records, so we convert it.
+    // 3. Update Wallet Balance
+    await Wallet.findOneAndUpdate(
+      { name: walletName },
+      { $inc: { balance: amount }, $set: { updatedAt: new Date() } }
+    );
+
+    // 4. Create Transaction Record
+    await Transaction.create({
+      walletName,
+      type: "In",
+      amount,
+      description: `Project Payment: ${project.projectName} (${project.clientName})`,
+      date: new Date()
+    });
+
+    // 5. Update Project Outstanding Balance
     const currentOutstanding = parseFloat(project.outstandingBalance as any || "0");
     const newOutstanding = Math.max(0, currentOutstanding - amount);
     
