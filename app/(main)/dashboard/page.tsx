@@ -6,6 +6,7 @@ import AddLeadModal from "@/components/Modals/AddLeadModal";
 
 export default function DashboardPage() {
   const [leads, setLeads] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState([]);
   const [retainerships, setRetainerships] = useState([]);
   const [payments, setPayments] = useState([]);
@@ -18,6 +19,7 @@ export default function DashboardPage() {
   }, []);
 
   const fetchData = async () => {
+    setLoading(true);
     const [lRes, pRes, rRes, payRes, wRes, tRes] = await Promise.all([
       fetch("/api/leads"),
       fetch("/api/projects"),
@@ -32,6 +34,7 @@ export default function DashboardPage() {
     setPayments(await payRes.json());
     setWallets(await wRes.json());
     setTransactions(await tRes.json());
+    setLoading(false);
   };
 
   const handleAddLead = async (data: any) => {
@@ -50,6 +53,7 @@ export default function DashboardPage() {
     <>
       <DashboardView 
         leads={leads} 
+        loading={loading}
         projects={projects} 
         retainerships={retainerships}
         payments={payments}

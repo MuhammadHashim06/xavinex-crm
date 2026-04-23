@@ -17,6 +17,7 @@ import {
   Wallet,
   AlertCircle
 } from "lucide-react";
+import Skeleton from "../ui/Skeleton";
 
 interface Lead {
   _id: string;
@@ -69,11 +70,12 @@ interface DashboardViewProps {
   payments: Payment[];
   wallets: Wallet[];
   transactions: Transaction[];
+  loading?: boolean;
   onAddLeadClick: () => void;
 }
 
 const DashboardView: React.FC<DashboardViewProps> = ({ 
-  leads, projects, retainerships, payments, wallets, transactions, onAddLeadClick 
+  leads, projects, retainerships, payments, wallets, transactions, loading, onAddLeadClick 
 }) => {
   // Active Projects filtering
   const activeProjects = projects.filter(p => ["In Progress", "On Hold"].includes(p.status));
@@ -244,8 +246,17 @@ const DashboardView: React.FC<DashboardViewProps> = ({
                   <Icon size={18} />
                 </div>
               </div>
-              <h3 className="text-muted text-[9px] font-bold uppercase tracking-wider">{stat.label}</h3>
-              <p className="text-lg font-bold text-white mt-1 group-hover:text-accent transition-colors truncate">{stat.value}</p>
+              {loading ? (
+                <div className="space-y-2">
+                  <Skeleton className="w-16 h-2" />
+                  <Skeleton className="w-24 h-5" />
+                </div>
+              ) : (
+                <>
+                  <h3 className="text-muted text-[9px] font-bold uppercase tracking-wider">{stat.label}</h3>
+                  <p className="text-lg font-bold text-white mt-1 group-hover:text-accent transition-colors truncate">{stat.value}</p>
+                </>
+              )}
             </div>
           );
         })}
@@ -257,29 +268,33 @@ const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="p-6 bg-card border border-border rounded-[2rem]">
           <h3 className="text-lg font-black text-white mb-6">Wallet Balances (Last 12 Months)</h3>
           <div className="h-[250px] md:h-[350px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={walletHistoryData}>
-                <defs>
-                  {walletNames.map((name, index) => (
-                    <linearGradient key={`color-${name}`} id={`color-${name.replace(/\s+/g, '')}`} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor={getWalletColor(index)} stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor={getWalletColor(index)} stopOpacity={0}/>
-                    </linearGradient>
-                  ))}
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} strokeOpacity={0.5} />
-                <XAxis dataKey="name" stroke="#666" fontSize={10} axisLine={false} tickLine={false} />
-                <YAxis stroke="#666" fontSize={10} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v}`} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#09090b', border: '1px solid #27272a', borderRadius: '16px' }}
-                />
-                <Area key="Bank" type="monotone" dataKey="Bank" stackId="a" stroke={getWalletColor(0)} strokeWidth={2} fillOpacity={1} fill={`url(#color-Bank)`} />
-                <Area key="Cash" type="monotone" dataKey="Cash" stackId="a" stroke={getWalletColor(1)} strokeWidth={2} fillOpacity={1} fill={`url(#color-Cash)`} />
-                <Area key="Payoneer" type="monotone" dataKey="Payoneer" stackId="a" stroke={getWalletColor(2)} strokeWidth={2} fillOpacity={1} fill={`url(#color-Payoneer)`} />
-                <Area type="monotone" dataKey="Total" stroke="#ffffff" strokeWidth={3} fill="transparent" stackId="b" />
-                <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: '12px', paddingTop: '20px' }} />
-              </AreaChart>
-            </ResponsiveContainer>
+            {loading ? (
+              <Skeleton className="w-full h-full rounded-2xl" />
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={walletHistoryData}>
+                  <defs>
+                    {walletNames.map((name, index) => (
+                      <linearGradient key={`color-${name}`} id={`color-${name.replace(/\s+/g, '')}`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor={getWalletColor(index)} stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor={getWalletColor(index)} stopOpacity={0}/>
+                      </linearGradient>
+                    ))}
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} strokeOpacity={0.5} />
+                  <XAxis dataKey="name" stroke="#666" fontSize={10} axisLine={false} tickLine={false} />
+                  <YAxis stroke="#666" fontSize={10} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v}`} />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: '#09090b', border: '1px solid #27272a', borderRadius: '16px' }}
+                  />
+                  <Area key="Bank" type="monotone" dataKey="Bank" stackId="a" stroke={getWalletColor(0)} strokeWidth={2} fillOpacity={1} fill={`url(#color-Bank)`} />
+                  <Area key="Cash" type="monotone" dataKey="Cash" stackId="a" stroke={getWalletColor(1)} strokeWidth={2} fillOpacity={1} fill={`url(#color-Cash)`} />
+                  <Area key="Payoneer" type="monotone" dataKey="Payoneer" stackId="a" stroke={getWalletColor(2)} strokeWidth={2} fillOpacity={1} fill={`url(#color-Payoneer)`} />
+                  <Area type="monotone" dataKey="Total" stroke="#ffffff" strokeWidth={3} fill="transparent" stackId="b" />
+                  <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: '12px', paddingTop: '20px' }} />
+                </AreaChart>
+              </ResponsiveContainer>
+            )}
           </div>
         </div>
 
@@ -287,21 +302,25 @@ const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="p-6 bg-card border border-border rounded-[2rem]">
           <h3 className="text-lg font-black text-white mb-6">Revenue Growth (Last 12 Months)</h3>
           <div className="h-[250px] md:h-[350px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={last12MonthsRevenue}>
-                <defs>
-                  <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} strokeOpacity={0.5} />
-                <XAxis dataKey="name" stroke="#666" fontSize={10} tickLine={false} axisLine={false} />
-                <YAxis stroke="#666" fontSize={10} tickLine={false} axisLine={false} tickFormatter={(v) => `$${v}`} />
-                <Tooltip contentStyle={{ backgroundColor: '#09090b', border: '1px solid #27272a', borderRadius: '16px' }} />
-                <Area type="monotone" dataKey="amount" stroke="#3b82f6" strokeWidth={4} fillOpacity={1} fill="url(#colorAmount)" />
-              </AreaChart>
-            </ResponsiveContainer>
+            {loading ? (
+              <Skeleton className="w-full h-full rounded-2xl" />
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={last12MonthsRevenue}>
+                  <defs>
+                    <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} strokeOpacity={0.5} />
+                  <XAxis dataKey="name" stroke="#666" fontSize={10} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#666" fontSize={10} tickLine={false} axisLine={false} tickFormatter={(v) => `$${v}`} />
+                  <Tooltip contentStyle={{ backgroundColor: '#09090b', border: '1px solid #27272a', borderRadius: '16px' }} />
+                  <Area type="monotone" dataKey="amount" stroke="#3b82f6" strokeWidth={4} fillOpacity={1} fill="url(#colorAmount)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            )}
           </div>
         </div>
       </div>
@@ -312,21 +331,25 @@ const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="p-6 bg-card border border-border rounded-[2rem]">
           <h3 className="text-lg font-bold text-white mb-6">Retainership Revenue (Last 12 Months)</h3>
           <div className="h-[250px] md:h-[350px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={last12MonthsRetainers}>
-                <defs>
-                  <linearGradient id="colorRetain" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} strokeOpacity={0.5} />
-                <XAxis dataKey="name" stroke="#666" fontSize={10} tickLine={false} axisLine={false} />
-                <YAxis stroke="#666" fontSize={10} tickLine={false} axisLine={false} tickFormatter={(v) => `$${v}`} />
-                <Tooltip contentStyle={{ backgroundColor: '#09090b', border: '1px solid #27272a', borderRadius: '16px' }} />
-                <Area type="monotone" dataKey="amount" stroke="#8b5cf6" strokeWidth={4} fillOpacity={1} fill="url(#colorRetain)" />
-              </AreaChart>
-            </ResponsiveContainer>
+            {loading ? (
+              <Skeleton className="w-full h-full rounded-2xl" />
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={last12MonthsRetainers}>
+                  <defs>
+                    <linearGradient id="colorRetain" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} strokeOpacity={0.5} />
+                  <XAxis dataKey="name" stroke="#666" fontSize={10} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#666" fontSize={10} tickLine={false} axisLine={false} tickFormatter={(v) => `$${v}`} />
+                  <Tooltip contentStyle={{ backgroundColor: '#09090b', border: '1px solid #27272a', borderRadius: '16px' }} />
+                  <Area type="monotone" dataKey="amount" stroke="#8b5cf6" strokeWidth={4} fillOpacity={1} fill="url(#colorRetain)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            )}
           </div>
         </div>
 
@@ -334,15 +357,19 @@ const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="p-6 bg-card border border-border rounded-[2rem]">
           <h3 className="text-lg font-bold text-white mb-6">Project Lock Volume ($) - Last 12 Months</h3>
           <div className="h-[250px] md:h-[350px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={last12MonthsProjects}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} strokeOpacity={0.5} />
-                <XAxis dataKey="name" stroke="#666" fontSize={10} axisLine={false} tickLine={false} />
-                <YAxis stroke="#666" fontSize={10} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v}`} />
-                <Tooltip cursor={{fill: 'rgba(255,255,255,0.05)'}} contentStyle={{ backgroundColor: '#09090b', border: '1px solid #27272a', borderRadius: '16px' }} />
-                <Bar dataKey="volume" fill="#f59e0b" radius={[6, 6, 0, 0]} barSize={30} />
-              </BarChart>
-            </ResponsiveContainer>
+            {loading ? (
+              <Skeleton className="w-full h-full rounded-2xl" />
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={last12MonthsProjects}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} strokeOpacity={0.5} />
+                  <XAxis dataKey="name" stroke="#666" fontSize={10} axisLine={false} tickLine={false} />
+                  <YAxis stroke="#666" fontSize={10} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v}`} />
+                  <Tooltip cursor={{fill: 'rgba(255,255,255,0.05)'}} contentStyle={{ backgroundColor: '#09090b', border: '1px solid #27272a', borderRadius: '16px' }} />
+                  <Bar dataKey="volume" fill="#f59e0b" radius={[6, 6, 0, 0]} barSize={30} />
+                </BarChart>
+              </ResponsiveContainer>
+            )}
           </div>
         </div>
       </div>

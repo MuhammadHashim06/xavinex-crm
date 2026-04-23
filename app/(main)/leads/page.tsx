@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 
 export default function LeadsPage() {
   const [leads, setLeads] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
   const [isOrderLockModalOpen, setIsOrderLockModalOpen] = useState(false);
   const [selectedLead, setSelectedLead] = useState<any>(null);
@@ -18,8 +19,10 @@ export default function LeadsPage() {
   }, []);
 
   const fetchLeads = async () => {
+    setLoading(true);
     const res = await fetch("/api/leads");
     setLeads(await res.json());
+    setLoading(false);
   };
 
   const updateLeadStatus = async (id: string, status: string) => {
@@ -104,6 +107,7 @@ export default function LeadsPage() {
     <>
       <LeadsPipeline 
         leads={leads} 
+        loading={loading}
         onAddLeadClick={() => setIsLeadModalOpen(true)}
         onStatusChange={updateLeadStatus}
         onAddFollowUp={addFollowUp}

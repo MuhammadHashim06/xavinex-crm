@@ -9,6 +9,7 @@ import EditProjectModal from "@/components/Modals/EditProjectModal";
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [payments, setPayments] = useState([]);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
@@ -21,12 +22,14 @@ export default function ProjectsPage() {
   }, []);
 
   const fetchData = async () => {
+    setLoading(true);
     const [pRes, payRes] = await Promise.all([
       fetch("/api/projects"),
       fetch("/api/payments"),
     ]);
     setProjects(await pRes.json());
     setPayments(await payRes.json());
+    setLoading(false);
   };
 
   const handleAddProject = async (data: any) => {
@@ -88,6 +91,7 @@ export default function ProjectsPage() {
     <>
       <ProjectsList 
         projects={projects} 
+        loading={loading}
         onStatusChange={updateProjectStatus}
         onAddProjectClick={() => setIsProjectModalOpen(true)}
         onAddPaymentClick={(project: any) => { setSelectedProject(project); setIsPaymentModalOpen(true); }}

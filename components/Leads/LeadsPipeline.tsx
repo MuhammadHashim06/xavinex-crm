@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import LeadCard from "./LeadCard";
+import Skeleton from "../ui/Skeleton";
 import { Plus, Search, Filter, Users, Target, TrendingUp, Calendar } from "lucide-react";
 
 interface Lead {
@@ -14,6 +15,7 @@ interface Lead {
 
 interface LeadsPipelineProps {
   leads: Lead[];
+  loading?: boolean;
   onAddLeadClick: () => void;
   onStatusChange: (id: string, status: string) => void;
   onAddFollowUp: (id: string, note: string) => void;
@@ -23,7 +25,7 @@ interface LeadsPipelineProps {
   onOrderLock: (lead: Lead) => void;
 }
 
-const LeadsPipeline: React.FC<LeadsPipelineProps> = ({ leads, onAddLeadClick, onStatusChange, onAddFollowUp, onEditFollowUp, onDeleteFollowUp, onDelete, onOrderLock }) => {
+const LeadsPipeline: React.FC<LeadsPipelineProps> = ({ leads, loading, onAddLeadClick, onStatusChange, onAddFollowUp, onEditFollowUp, onDeleteFollowUp, onDelete, onOrderLock }) => {
   const statuses = ["New Leads", "In Conversation", "Follow Up", "Strong Lead", "Order Locked", "Not Interested"];
   const [activeTab, setActiveTab] = useState(statuses[0]);
   const [sourceFilter, setSourceFilter] = useState("All");
@@ -147,23 +149,41 @@ const LeadsPipeline: React.FC<LeadsPipelineProps> = ({ leads, onAddLeadClick, on
 
       {/* Grid View */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {filteredLeads.map((lead) => (
-          <LeadCard 
-            key={lead._id} 
-            lead={lead} 
-            onStatusChange={onStatusChange} 
-            onAddFollowUp={onAddFollowUp}
-            onEditFollowUp={onEditFollowUp}
-            onDeleteFollowUp={onDeleteFollowUp}
-            onDelete={onDelete}
-            onOrderLock={onOrderLock} 
-          />
-        ))}
-        {filteredLeads.length === 0 && (
-          <div className="col-span-full py-20 flex flex-col items-center justify-center bg-card/30 border border-dashed border-border rounded-2xl opacity-50">
-            <Search size={40} className="text-muted mb-4" />
-            <p className="text-muted font-medium">No leads found in this category.</p>
-          </div>
+        {loading ? (
+          [1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="p-4 bg-card border border-border rounded-xl">
+              <div className="flex gap-2 mb-4">
+                <Skeleton className="w-12 h-4 rounded-md" />
+                <Skeleton className="w-16 h-4 rounded-md" />
+              </div>
+              <Skeleton className="w-40 h-5 mb-2" />
+              <Skeleton className="w-24 h-3 mb-6" />
+              <div className="pt-4 border-t border-border/50">
+                <Skeleton className="w-full h-20 rounded-lg" />
+              </div>
+            </div>
+          ))
+        ) : (
+          <>
+            {filteredLeads.map((lead) => (
+              <LeadCard 
+                key={lead._id} 
+                lead={lead} 
+                onStatusChange={onStatusChange} 
+                onAddFollowUp={onAddFollowUp}
+                onEditFollowUp={onEditFollowUp}
+                onDeleteFollowUp={onDeleteFollowUp}
+                onDelete={onDelete}
+                onOrderLock={onOrderLock} 
+              />
+            ))}
+            {filteredLeads.length === 0 && (
+              <div className="col-span-full py-20 flex flex-col items-center justify-center bg-card/30 border border-dashed border-border rounded-2xl opacity-50">
+                <Search size={40} className="text-muted mb-4" />
+                <p className="text-muted font-medium">No leads found in this category.</p>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
