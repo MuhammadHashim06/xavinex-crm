@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Project from "@/models/Project";
+import Payment from "@/models/Payment";
 
 export async function PATCH(
   req: Request,
@@ -24,9 +25,16 @@ export async function DELETE(
   try {
     await connectDB();
     const { id } = await params;
+    
+    // Cascade delete: Delete all payments associated with this project
+    await Payment.deleteMany({ projectId: id });
+    
+    // Delete the project itself
     await Project.findByIdAndDelete(id);
-    return NextResponse.json({ message: "Project deleted" });
+    
+    return NextResponse.json({ message: "Project and associated data deleted" });
   } catch (error) {
+    console.error("DELETE /api/projects/[id] Error:", error);
     return NextResponse.json({ error: "Failed to delete project" }, { status: 500 });
   }
 }
