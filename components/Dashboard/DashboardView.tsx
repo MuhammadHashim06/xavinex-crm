@@ -18,6 +18,8 @@ interface Project {
   _id: string;
   clientName: string;
   status: string;
+  totalBudget: string;
+  startDate: string;
 }
 
 interface Retainership {
@@ -52,6 +54,9 @@ const DashboardView: React.FC<DashboardViewProps> = ({ leads, projects, retainer
     })
     .reduce((sum, p) => sum + p.amount, 0);
 
+  // Conversion Ratio (Fraction)
+  const conversionRatio = `${projects.length} / ${leads.length}`;
+
   // Revenue Data (Last 6 Months)
   const last6Months = Array.from({ length: 6 }).map((_, i) => {
     const d = new Date();
@@ -64,6 +69,20 @@ const DashboardView: React.FC<DashboardViewProps> = ({ leads, projects, retainer
       })
       .reduce((sum, p) => sum + p.amount, 0);
     return { name: month, amount };
+  });
+
+  // Project Lock Volume (Last 12 Months)
+  const last12MonthsProjects = Array.from({ length: 12 }).map((_, i) => {
+    const d = new Date();
+    d.setMonth(d.getMonth() - (11 - i));
+    const month = d.toLocaleString('default', { month: 'short' });
+    const volume = projects
+      .filter(p => {
+        const pDate = new Date(p.startDate || (p as any).date);
+        return pDate.getMonth() === d.getMonth() && pDate.getFullYear() === d.getFullYear();
+      })
+      .reduce((sum, p) => sum + (parseFloat(p.totalBudget) || 0), 0);
+    return { name: month, volume };
   });
 
   // Lead Distribution Data
@@ -90,19 +109,20 @@ const DashboardView: React.FC<DashboardViewProps> = ({ leads, projects, retainer
       </header>
       
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         {[
           { label: "Total Leads", value: leads.length, icon: "👤", color: "bg-blue-500/10 text-blue-500" },
           { label: "Monthly Revenue", value: `$${monthlyIncome.toLocaleString()}`, icon: "💵", color: "bg-emerald-500/10 text-emerald-500" },
-          { label: "Active Retainers", value: `$${totalRetainership.toLocaleString()}`, icon: "🔄", color: "bg-purple-500/10 text-purple-500" },
+          { label: "Monthly Retainers", value: `$${totalRetainership.toLocaleString()}`, icon: "🔄", color: "bg-purple-500/10 text-purple-500" },
           { label: "Active Projects", value: projects.length, icon: "🚀", color: "bg-amber-500/10 text-amber-500" },
+          { label: "Conversion Ratio", value: conversionRatio, icon: "📈", color: "bg-rose-500/10 text-rose-500" },
         ].map((stat, i) => (
-          <div key={i} className="p-6 bg-card border border-border rounded-2xl hover:border-accent/50 transition-colors group">
+          <div key={i} className="p-5 bg-card border border-border rounded-2xl hover:border-accent/50 transition-colors group">
             <div className="flex items-center justify-between mb-4">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl ${stat.color}`}>{stat.icon}</div>
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg ${stat.color}`}>{stat.icon}</div>
             </div>
-            <h3 className="text-muted text-sm font-medium">{stat.label}</h3>
-            <p className="text-2xl font-bold text-white mt-1 group-hover:text-accent transition-colors">{stat.value}</p>
+            <h3 className="text-muted text-[10px] font-bold uppercase tracking-wider">{stat.label}</h3>
+            <p className="text-xl font-bold text-white mt-1 group-hover:text-accent transition-colors">{stat.value}</p>
           </div>
         ))}
       </div>
@@ -191,7 +211,7 @@ const DashboardView: React.FC<DashboardViewProps> = ({ leads, projects, retainer
               <span className="text-xs text-muted">Latest Leads</span>
             </div>
             <div className="space-y-4">
-              {leads.slice(0, 4).map((lead) => (
+              {leads.slice(0, 5).map((lead) => (
                 <div key={lead._id} className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-border">
                   <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold">{lead.clientName[0]}</div>
                   <div>
@@ -208,24 +228,33 @@ const DashboardView: React.FC<DashboardViewProps> = ({ leads, projects, retainer
             </div>
          </div>
 
-         {/* Retention Bar Chart */}
+         {/* Project Lock Volume (Last 12 Months) */}
          <div className="p-6 bg-card border border-border rounded-2xl">
-            <h3 className="text-lg font-bold text-white mb-6">Retention Overview</h3>
-            <div className="flex flex-col items-center justify-center h-[260px]">
+            <h3 className="text-lg font-bold text-white mb-6">Project Lock Volume ($) - Last 12 Months</h3>
+            <div className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={[
-                  { name: 'Leads', count: leads.length },
-                  { name: 'Projects', count: projects.length },
-                  { name: 'Retainers', count: retainerships.length }
-                ]}>
+                <BarChart data={last12MonthsProjects}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
-                  <XAxis dataKey="name" stroke="#666" fontSize={12} axisLine={false} tickLine={false} />
-                  <YAxis stroke="#666" fontSize={12} axisLine={false} tickLine={false} />
+                  <XAxis 
+                    dataKey="name" 
+                    stroke="#666" 
+                    fontSize={10} 
+                    axisLine={false} 
+                    tickLine={false} 
+                  />
+                  <YAxis 
+                    stroke="#666" 
+                    fontSize={10} 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tickFormatter={(value) => `$${value}`}
+                  />
                   <Tooltip 
                     cursor={{fill: 'rgba(255,255,255,0.05)'}}
                     contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #333', borderRadius: '12px' }}
+                    itemStyle={{ color: '#fff' }}
                   />
-                  <Bar dataKey="count" fill="#8b5cf6" radius={[4, 4, 0, 0]} barSize={40} />
+                  <Bar dataKey="volume" fill="#f59e0b" radius={[4, 4, 0, 0]} barSize={25} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -70,14 +71,23 @@ export default function LoginPage() {
 
             <div>
               <label className="block text-xs font-bold text-muted uppercase tracking-widest mb-2">Password</label>
-              <input 
-                required
-                type="password" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-background border border-border rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-accent transition-all placeholder:text-muted/30"
-                placeholder="••••••••"
-              />
+              <div className="relative group">
+                <input 
+                  required
+                  type={showPassword ? "text" : "password"} 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-background border border-border rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-accent transition-all placeholder:text-muted/30 pr-12"
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted hover:text-white transition-colors"
+                >
+                  {showPassword ? "👁️‍🗨️" : "👁️"}
+                </button>
+              </div>
             </div>
 
             <button 

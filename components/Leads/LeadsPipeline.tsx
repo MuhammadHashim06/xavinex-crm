@@ -76,16 +76,16 @@ const LeadsPipeline: React.FC<LeadsPipelineProps> = ({ leads, onAddLeadClick, on
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-border overflow-x-auto pb-px scrollbar-hide no-scrollbar">
+      <div className="flex flex-wrap items-center gap-1 border-b border-border pb-px">
         {statuses.map((status) => {
           const count = leads.filter(l => l.status === status && (sourceFilter === "All" || l.source === sourceFilter)).length;
           return (
             <button
               key={status}
               onClick={() => setActiveTab(status)}
-              className={`flex items-center gap-2 px-6 py-4 border-b-2 transition-all whitespace-nowrap relative group ${
+              className={`flex items-center gap-2 px-4 py-3 border-b-2 transition-all relative group rounded-t-xl mb-[-1px] ${
                 activeTab === status 
-                  ? "border-accent text-accent bg-accent/5" 
+                  ? "border-accent text-accent bg-accent/10" 
                   : "border-transparent text-muted hover:text-white hover:bg-white/5"
               }`}
             >
