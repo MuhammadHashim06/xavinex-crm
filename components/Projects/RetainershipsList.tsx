@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Plus, Pencil, Trash2, ShieldAlert } from "lucide-react";
+import { Plus, Pencil, Trash2, ShieldAlert, RefreshCw, DollarSign, Users, TrendingUp } from "lucide-react";
 
 interface Retainership {
   _id: string;
@@ -34,6 +34,17 @@ const RetainershipsList: React.FC<RetainershipsListProps> = ({ retainerships, on
     return Math.round((elapsed / total) * 100);
   };
 
+  // Stats Calculations
+  const totalMRR = retainerships.reduce((sum, r) => sum + r.price, 0);
+  const activeCount = retainerships.length;
+  const avgTicketSize = activeCount > 0 ? (totalMRR / activeCount).toFixed(0) : "0";
+  const endingSoon = retainerships.filter(r => {
+    const end = new Date(r.endDate).getTime();
+    const today = new Date().getTime();
+    const thirtyDays = 30 * 24 * 60 * 60 * 1000;
+    return end > today && (end - today) < thirtyDays;
+  }).length;
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex justify-between items-end">
@@ -48,6 +59,29 @@ const RetainershipsList: React.FC<RetainershipsListProps> = ({ retainerships, on
           <Plus size={18} />
           New Retainership
         </button>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {[
+          { label: "Active Retainers", value: activeCount, icon: RefreshCw, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+          { label: "Monthly Revenue (MRR)", value: `$${totalMRR.toLocaleString()}`, icon: DollarSign, color: "text-blue-500", bg: "bg-blue-500/10" },
+          { label: "Avg. Ticket Size", value: `$${avgTicketSize}`, icon: TrendingUp, color: "text-purple-500", bg: "bg-purple-500/10" },
+          { label: "Expiring (30d)", value: endingSoon, icon: Users, color: "text-rose-500", bg: "bg-rose-500/10" },
+        ].map((stat, i) => {
+          const Icon = stat.icon;
+          return (
+            <div key={i} className="p-5 bg-card border border-border rounded-2xl flex items-center justify-between group hover:border-emerald-500/30 transition-all">
+              <div>
+                <h3 className="text-muted text-[10px] font-bold uppercase tracking-wider mb-1">{stat.label}</h3>
+                <p className="text-2xl font-bold text-white">{stat.value}</p>
+              </div>
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${stat.bg} ${stat.color}`}>
+                <Icon size={20} />
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="grid grid-cols-1 gap-4">

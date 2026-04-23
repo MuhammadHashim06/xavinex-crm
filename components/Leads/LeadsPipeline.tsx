@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import LeadCard from "./LeadCard";
-import { Plus, Search, Filter } from "lucide-react";
+import { Plus, Search, Filter, Users, Target, TrendingUp, Calendar } from "lucide-react";
 
 interface Lead {
   _id: string;
@@ -43,6 +43,19 @@ const LeadsPipeline: React.FC<LeadsPipelineProps> = ({ leads, onAddLeadClick, on
     }
   };
 
+  // Stats Calculations
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+  
+  const totalLeads = leads.length;
+  const lockedLeads = leads.filter(l => l.status === "Order Locked").length;
+  const conversionRate = totalLeads > 0 ? ((lockedLeads / totalLeads) * 100).toFixed(1) : "0";
+  const newLeadsThisMonth = leads.filter(l => {
+    const d = new Date(l.createdAt);
+    return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+  }).length;
+  const activeLeads = leads.filter(l => ["In Conversation", "Follow Up", "Strong Lead"].includes(l.status)).length;
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       {/* Header */}
@@ -78,6 +91,29 @@ const LeadsPipeline: React.FC<LeadsPipelineProps> = ({ leads, onAddLeadClick, on
             New Lead
           </button>
         </div>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {[
+          { label: "Total Leads", value: totalLeads, icon: Users, color: "text-blue-500", bg: "bg-blue-500/10" },
+          { label: "Active Pursuits", value: activeLeads, icon: Target, color: "text-purple-500", bg: "bg-purple-500/10" },
+          { label: "Conversion Rate", value: `${conversionRate}%`, icon: TrendingUp, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+          { label: "New This Month", value: newLeadsThisMonth, icon: Calendar, color: "text-amber-500", bg: "bg-amber-500/10" },
+        ].map((stat, i) => {
+          const Icon = stat.icon;
+          return (
+            <div key={i} className="p-5 bg-card border border-border rounded-2xl flex items-center justify-between group hover:border-accent/30 transition-all">
+              <div>
+                <h3 className="text-muted text-[10px] font-bold uppercase tracking-wider mb-1">{stat.label}</h3>
+                <p className="text-2xl font-bold text-white">{stat.value}</p>
+              </div>
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${stat.bg} ${stat.color}`}>
+                <Icon size={20} />
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Tabs */}
