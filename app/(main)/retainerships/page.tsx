@@ -3,10 +3,13 @@
 import React, { useState, useEffect } from "react";
 import RetainershipsList from "@/components/Projects/RetainershipsList";
 import AddRetainershipModal from "@/components/Modals/AddRetainershipModal";
+import EditRetainershipModal from "@/components/Modals/EditRetainershipModal";
 
 export default function RetainershipsPage() {
   const [retainerships, setRetainerships] = useState([]);
-  const [isRetainershipModalOpen, setIsRetainershipModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedRetainership, setSelectedRetainership] = useState<any>(null);
 
   useEffect(() => {
     fetchRetainerships();
@@ -25,7 +28,20 @@ export default function RetainershipsPage() {
     });
     if (res.ok) {
       fetchRetainerships();
-      setIsRetainershipModalOpen(false);
+      setIsAddModalOpen(false);
+    }
+  };
+
+  const handleEditRetainership = async (id: string, data: any) => {
+    const res = await fetch(`/api/retainerships/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (res.ok) {
+      fetchRetainerships();
+      setIsEditModalOpen(false);
+      setSelectedRetainership(null);
     }
   };
 
@@ -40,14 +56,22 @@ export default function RetainershipsPage() {
     <>
       <RetainershipsList 
         retainerships={retainerships} 
-        onAddClick={() => setIsRetainershipModalOpen(true)} 
+        onAddClick={() => setIsAddModalOpen(true)} 
         onDelete={handleDeleteRetainership} 
+        onEditClick={(r) => { setSelectedRetainership(r); setIsEditModalOpen(true); }}
       />
 
       <AddRetainershipModal 
-        isOpen={isRetainershipModalOpen} 
-        onClose={() => setIsRetainershipModalOpen(false)} 
+        isOpen={isAddModalOpen} 
+        onClose={() => setIsAddModalOpen(false)} 
         onSubmit={handleAddRetainership} 
+      />
+
+      <EditRetainershipModal 
+        isOpen={isEditModalOpen}
+        onClose={() => { setIsEditModalOpen(false); setSelectedRetainership(null); }}
+        retainership={selectedRetainership}
+        onSubmit={handleEditRetainership}
       />
     </>
   );

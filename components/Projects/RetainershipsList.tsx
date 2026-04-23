@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Plus, Pencil, Trash2, ShieldAlert } from "lucide-react";
 
 interface Retainership {
   _id: string;
@@ -15,9 +16,10 @@ interface RetainershipsListProps {
   retainerships: Retainership[];
   onDelete: (id: string) => void;
   onAddClick: () => void;
+  onEditClick: (retainership: Retainership) => void;
 }
 
-const RetainershipsList: React.FC<RetainershipsListProps> = ({ retainerships, onDelete, onAddClick }) => {
+const RetainershipsList: React.FC<RetainershipsListProps> = ({ retainerships, onDelete, onAddClick, onEditClick }) => {
   const calculateProgress = (start: string, end: string) => {
     if (!start || !end) return 0;
     const startDate = new Date(start).getTime();
@@ -43,7 +45,8 @@ const RetainershipsList: React.FC<RetainershipsListProps> = ({ retainerships, on
           onClick={onAddClick}
           className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-all glow-button flex items-center gap-2"
         >
-          <span>+</span> New Retainership
+          <Plus size={18} />
+          New Retainership
         </button>
       </div>
 
@@ -93,11 +96,19 @@ const RetainershipsList: React.FC<RetainershipsListProps> = ({ retainerships, on
                         </div>
                       </td>
                       <td className="px-6 py-4 font-bold text-white">${r.price}</td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-4 flex items-center gap-2">
+                        <button 
+                          onClick={() => onEditClick(r)}
+                          className="w-8 h-8 flex items-center justify-center bg-white/5 text-muted hover:text-white hover:bg-white/10 rounded-lg transition-all"
+                          title="Edit"
+                        >
+                          <Pencil size={14} />
+                        </button>
                         <button 
                           onClick={() => { if(confirm("Are you sure?")) onDelete(r._id); }}
-                          className="px-3 py-1.5 bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white rounded-lg text-xs font-bold transition-all"
+                          className="px-3 py-1.5 bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1.5"
                         >
+                          <Trash2 size={12} />
                           Terminate
                         </button>
                       </td>
@@ -109,6 +120,7 @@ const RetainershipsList: React.FC<RetainershipsListProps> = ({ retainerships, on
           </div>
         ) : (
           <div className="py-20 text-center bg-card border border-border border-dashed rounded-2xl">
+            <ShieldAlert size={48} className="mx-auto text-muted/20 mb-4" />
             <p className="text-muted italic">No active retainerships found.</p>
             <button onClick={onAddClick} className="mt-4 text-accent text-sm font-bold hover:underline">Start your first retainership</button>
           </div>

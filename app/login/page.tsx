@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff, LogIn, Mail, Lock } from "lucide-react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -18,47 +19,46 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const result = await signIn("credentials", {
+      const res = await signIn("credentials", {
         email,
         password,
         redirect: false,
       });
 
-      if (result?.error) {
+      if (res?.error) {
         setError("Invalid email or password");
       } else {
-        router.push("/");
-        router.refresh();
+        router.push("/dashboard");
       }
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+      setError("An unexpected error occurred");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4 font-sans">
       <div className="w-full max-w-md animate-in fade-in zoom-in duration-500">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-accent rounded-2xl flex items-center justify-center font-bold text-white shadow-xl shadow-accent/20 mx-auto mb-4 text-2xl">X</div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">XAVINEX CRM</h1>
-          <p className="text-muted mt-2">Sign in to manage your pipeline</p>
+        <div className="text-center mb-10">
+          <div className="w-20 h-20 bg-accent rounded-3xl flex items-center justify-center font-bold text-4xl text-white mx-auto shadow-2xl shadow-accent/30 mb-6 rotate-3">X</div>
+          <h1 className="text-4xl font-black text-white tracking-tighter mb-2">XAVINEX CRM</h1>
+          <p className="text-muted font-medium">Welcome back, Admin</p>
         </div>
 
-        <div className="bg-card border border-border p-8 rounded-3xl shadow-2xl relative overflow-hidden">
-          {/* Decorative Glow */}
-          <div className="absolute -top-24 -right-24 w-48 h-48 bg-accent/10 rounded-full blur-3xl"></div>
-          
-          <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+        <div className="bg-card p-8 rounded-[2rem] border border-border shadow-2xl backdrop-blur-xl">
+          <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg-rose-500/10 border border-rose-500/20 text-rose-500 p-4 rounded-xl text-sm font-bold animate-shake">
-                ⚠️ {error}
+              <div className="p-4 bg-rose-500/10 border border-rose-500/20 text-rose-500 rounded-2xl text-sm font-bold text-center animate-shake">
+                {error}
               </div>
             )}
-
-            <div>
-              <label className="block text-xs font-bold text-muted uppercase tracking-widest mb-2">Email Address</label>
+            
+            <div className="space-y-2">
+              <label className="block text-[10px] font-bold text-muted uppercase tracking-widest ml-1 flex items-center gap-2">
+                <Mail size={12} />
+                Email Address
+              </label>
               <input 
                 required
                 type="email" 
@@ -69,9 +69,12 @@ export default function LoginPage() {
               />
             </div>
 
-            <div>
-              <label className="block text-xs font-bold text-muted uppercase tracking-widest mb-2">Password</label>
-              <div className="relative group">
+            <div className="space-y-2">
+              <label className="block text-[10px] font-bold text-muted uppercase tracking-widest ml-1 flex items-center gap-2">
+                <Lock size={12} />
+                Password
+              </label>
+              <div className="relative">
                 <input 
                   required
                   type={showPassword ? "text" : "password"} 
@@ -85,7 +88,7 @@ export default function LoginPage() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-muted hover:text-white transition-colors"
                 >
-                  {showPassword ? "👁️‍🗨️" : "👁️"}
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
@@ -100,13 +103,18 @@ export default function LoginPage() {
                   <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                   Signing in...
                 </>
-              ) : "Sign In"}
+              ) : (
+                <>
+                  <LogIn size={18} />
+                  Sign In
+                </>
+              )}
             </button>
           </form>
         </div>
-
-        <p className="text-center text-muted text-xs mt-8">
-          Secure, enterprise-grade authentication by Xavinex.
+        
+        <p className="text-center text-muted text-[10px] font-bold uppercase tracking-widest mt-8 opacity-40">
+          SECURE ADMIN ACCESS ONLY
         </p>
       </div>
     </div>

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import LeadCard from "./LeadCard";
+import { Plus, Search, Filter } from "lucide-react";
 
 interface Lead {
   _id: string;
@@ -51,7 +52,10 @@ const LeadsPipeline: React.FC<LeadsPipelineProps> = ({ leads, onAddLeadClick, on
           <p className="text-muted">Manage and track your potential clients.</p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="flex bg-card border border-border rounded-xl p-1">
+          <div className="flex items-center gap-2 bg-card border border-border rounded-xl p-1">
+            <div className="pl-2 text-muted">
+              <Filter size={12} />
+            </div>
             {["All", "Fiverr", "Direct"].map((src) => (
               <button
                 key={src}
@@ -70,7 +74,8 @@ const LeadsPipeline: React.FC<LeadsPipelineProps> = ({ leads, onAddLeadClick, on
             onClick={onAddLeadClick}
             className="px-5 py-2.5 bg-accent hover:bg-accent/90 text-white rounded-xl font-bold transition-all glow-button flex items-center gap-2"
           >
-            <span>+</span> New Lead
+            <Plus size={18} />
+            New Lead
           </button>
         </div>
       </div>
@@ -116,7 +121,7 @@ const LeadsPipeline: React.FC<LeadsPipelineProps> = ({ leads, onAddLeadClick, on
         ))}
         {filteredLeads.length === 0 && (
           <div className="col-span-full py-20 flex flex-col items-center justify-center bg-card/30 border border-dashed border-border rounded-2xl opacity-50">
-            <span className="text-4xl mb-4">🔍</span>
+            <Search size={40} className="text-muted mb-4" />
             <p className="text-muted font-medium">No leads found in this category.</p>
           </div>
         )}

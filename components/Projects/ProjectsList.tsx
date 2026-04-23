@@ -1,6 +1,16 @@
 "use client";
 
 import React from "react";
+import { 
+  Plus, 
+  DollarSign, 
+  Pencil, 
+  Trash2, 
+  Wallet,
+  CheckCircle2,
+  AlertCircle,
+  FolderOpen
+} from "lucide-react";
 
 interface Project {
   _id: string;
@@ -56,21 +66,30 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ projects, onStatusChange, o
           onClick={onAddProjectClick}
           className="px-5 py-2.5 bg-accent hover:bg-accent/90 text-white rounded-xl font-bold transition-all glow-button flex items-center gap-2"
         >
-          <span>+</span> New Project
+          <Plus size={18} />
+          New Project
         </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {[
-          { label: "Active Pipeline", value: `$${totalBudget.toLocaleString()}`, color: "text-blue-500", bg: "bg-blue-500/10" },
-          { label: "Total Collected", value: `$${totalCollected.toLocaleString()}`, color: "text-emerald-500", bg: "bg-emerald-500/10" },
-          { label: "Total Outstanding", value: `$${totalOutstanding.toLocaleString()}`, color: "text-orange-500", bg: "bg-orange-500/10" },
-        ].map((stat, i) => (
-          <div key={i} className="p-5 bg-card border border-border rounded-2xl">
-            <h3 className="text-muted text-[10px] font-bold uppercase tracking-wider mb-1">{stat.label}</h3>
-            <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
-          </div>
-        ))}
+          { label: "Active Pipeline", value: `$${totalBudget.toLocaleString()}`, color: "text-blue-500", bg: "bg-blue-500/10", icon: FolderOpen },
+          { label: "Total Collected", value: `$${totalCollected.toLocaleString()}`, color: "text-emerald-500", bg: "bg-emerald-500/10", icon: CheckCircle2 },
+          { label: "Total Outstanding", value: `$${totalOutstanding.toLocaleString()}`, color: "text-orange-500", bg: "bg-orange-500/10", icon: AlertCircle },
+        ].map((stat, i) => {
+          const Icon = stat.icon;
+          return (
+            <div key={i} className="p-5 bg-card border border-border rounded-2xl flex items-center justify-between">
+              <div>
+                <h3 className="text-muted text-[10px] font-bold uppercase tracking-wider mb-1">{stat.label}</h3>
+                <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+              </div>
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${stat.bg} ${stat.color}`}>
+                <Icon size={20} />
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="grid grid-cols-1 gap-4">
@@ -83,7 +102,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ projects, onStatusChange, o
                   <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider text-left">Client</th>
                   <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider text-left">Timeline & Progress</th>
                   <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider text-left">Budget</th>
-                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider text-left">Status</th>
+                  <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider text-left text-center">Status</th>
                   <th className="px-6 py-4 text-xs font-bold text-muted uppercase tracking-wider text-left">Actions</th>
                 </tr>
               </thead>
@@ -152,21 +171,21 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ projects, onStatusChange, o
                             title="Record Payment"
                             className="w-9 h-9 flex items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500 hover:text-white transition-all"
                           >
-                            💰
+                            <Wallet size={16} />
                           </button>
                           <button 
                             onClick={() => onEditProjectClick(project)}
                             title="Edit Project"
                             className="w-9 h-9 flex items-center justify-center rounded-xl bg-accent/10 text-accent hover:bg-accent hover:text-white transition-all"
                           >
-                            ✏️
+                            <Pencil size={16} />
                           </button>
                           <button 
                             onClick={() => { if(confirm("Are you sure?")) onDeleteProject(project._id); }}
                             title="Delete Project"
                             className="w-9 h-9 flex items-center justify-center rounded-xl bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all"
                           >
-                            🗑️
+                            <Trash2 size={16} />
                           </button>
                         </div>
                       </td>
@@ -178,7 +197,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ projects, onStatusChange, o
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-20 bg-card border border-dashed border-border rounded-2xl">
-            <div className="text-4xl mb-4 opacity-20">📁</div>
+            <FolderOpen size={48} className="text-muted/20 mb-4" />
             <p className="text-muted font-medium">No projects yet. Convert a strong lead to get started.</p>
           </div>
         )}

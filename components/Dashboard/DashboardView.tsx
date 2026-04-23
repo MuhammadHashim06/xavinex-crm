@@ -5,6 +5,16 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend, BarChart, Bar
 } from "recharts";
+import { 
+  Users, 
+  DollarSign, 
+  RefreshCw, 
+  Rocket, 
+  TrendingUp, 
+  PlusCircle,
+  Search,
+  Activity
+} from "lucide-react";
 
 interface Lead {
   _id: string;
@@ -104,27 +114,33 @@ const DashboardView: React.FC<DashboardViewProps> = ({ leads, projects, retainer
           onClick={onAddLeadClick}
           className="px-5 py-2.5 bg-accent hover:bg-accent/90 text-white rounded-xl font-bold transition-all glow-button flex items-center gap-2"
         >
-          <span>+</span> New Lead
+          <PlusCircle size={18} />
+          New Lead
         </button>
       </header>
       
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         {[
-          { label: "Total Leads", value: leads.length, icon: "👤", color: "bg-blue-500/10 text-blue-500" },
-          { label: "Monthly Revenue", value: `$${monthlyIncome.toLocaleString()}`, icon: "💵", color: "bg-emerald-500/10 text-emerald-500" },
-          { label: "Monthly Retainers", value: `$${totalRetainership.toLocaleString()}`, icon: "🔄", color: "bg-purple-500/10 text-purple-500" },
-          { label: "Active Projects", value: projects.length, icon: "🚀", color: "bg-amber-500/10 text-amber-500" },
-          { label: "Conversion Ratio", value: conversionRatio, icon: "📈", color: "bg-rose-500/10 text-rose-500" },
-        ].map((stat, i) => (
-          <div key={i} className="p-5 bg-card border border-border rounded-2xl hover:border-accent/50 transition-colors group">
-            <div className="flex items-center justify-between mb-4">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg ${stat.color}`}>{stat.icon}</div>
+          { label: "Total Leads", value: leads.length, icon: Users, color: "text-blue-500", bg: "bg-blue-500/10" },
+          { label: "Monthly Revenue", value: `$${monthlyIncome.toLocaleString()}`, icon: DollarSign, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+          { label: "Monthly Retainers", value: `$${totalRetainership.toLocaleString()}`, icon: RefreshCw, color: "text-purple-500", bg: "bg-purple-500/10" },
+          { label: "Active Projects", value: projects.length, icon: Rocket, color: "text-amber-500", bg: "bg-amber-500/10" },
+          { label: "Conversion Ratio", value: conversionRatio, icon: TrendingUp, color: "text-rose-500", bg: "bg-rose-500/10" },
+        ].map((stat, i) => {
+          const Icon = stat.icon;
+          return (
+            <div key={i} className="p-5 bg-card border border-border rounded-2xl hover:border-accent/50 transition-colors group">
+              <div className="flex items-center justify-between mb-4">
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${stat.bg} ${stat.color}`}>
+                  <Icon size={20} />
+                </div>
+              </div>
+              <h3 className="text-muted text-[10px] font-bold uppercase tracking-wider">{stat.label}</h3>
+              <p className="text-xl font-bold text-white mt-1 group-hover:text-accent transition-colors">{stat.value}</p>
             </div>
-            <h3 className="text-muted text-[10px] font-bold uppercase tracking-wider">{stat.label}</h3>
-            <p className="text-xl font-bold text-white mt-1 group-hover:text-accent transition-colors">{stat.value}</p>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Charts Row */}
@@ -207,13 +223,16 @@ const DashboardView: React.FC<DashboardViewProps> = ({ leads, projects, retainer
          {/* Recent Activity */}
          <div className="p-6 bg-card border border-border rounded-2xl">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-lg font-bold text-white">Recent Activity</h3>
+              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <Activity size={20} className="text-accent" />
+                Recent Activity
+              </h3>
               <span className="text-xs text-muted">Latest Leads</span>
             </div>
             <div className="space-y-4">
               {leads.slice(0, 5).map((lead) => (
                 <div key={lead._id} className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-border">
-                  <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold">{lead.clientName[0]}</div>
+                  <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold text-sm">{lead.clientName[0]}</div>
                   <div>
                     <p className="text-sm font-bold text-white">{lead.clientName}</p>
                     <p className="text-xs text-muted">New lead added via {lead.source}</p>
@@ -224,7 +243,12 @@ const DashboardView: React.FC<DashboardViewProps> = ({ leads, projects, retainer
                   </div>
                 </div>
               ))}
-              {leads.length === 0 && <p className="text-muted text-sm italic">No recent activity</p>}
+              {leads.length === 0 && (
+                <div className="py-10 text-center">
+                  <Search size={32} className="mx-auto text-muted/20 mb-3" />
+                  <p className="text-muted text-sm italic">No recent activity</p>
+                </div>
+              )}
             </div>
          </div>
 
