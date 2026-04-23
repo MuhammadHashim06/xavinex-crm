@@ -147,14 +147,14 @@ const WalletView: React.FC<WalletViewProps> = ({ onAddTransaction, onUpdateBalan
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
-      <header className="flex justify-between items-end">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white">Wallet Management</h1>
-          <p className="text-muted">Track balances across Payoneer, Bank, and Cash.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white">Wallet Management</h1>
+          <p className="text-muted text-sm">Track balances across Payoneer, Bank, and Cash.</p>
         </div>
-        <div className="flex flex-col items-end">
+        <div className="flex flex-col items-start sm:items-end">
           <span className="text-[10px] font-bold text-muted uppercase tracking-widest mb-1">Total Assets</span>
-          <span className="text-3xl font-black text-white glow-text">${totalBalance.toLocaleString()}</span>
+          <span className="text-2xl sm:text-3xl font-black text-white glow-text">${totalBalance.toLocaleString()}</span>
         </div>
       </header>
 

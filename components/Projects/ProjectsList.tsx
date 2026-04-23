@@ -77,21 +77,21 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ projects, loading, onStatus
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white">Project Pipeline</h1>
-          <p className="text-muted">Tracking your active orders and financial overview.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white">Project Pipeline</h1>
+          <p className="text-muted text-sm">Tracking your active orders and financial overview.</p>
         </div>
         <button 
           onClick={onAddProjectClick}
-          className="px-5 py-2.5 bg-accent hover:bg-accent/90 text-white rounded-xl font-bold transition-all glow-button flex items-center gap-2"
+          className="px-5 py-2.5 bg-accent hover:bg-accent/90 text-white rounded-xl font-bold transition-all glow-button flex items-center gap-2 w-full sm:w-auto justify-center"
         >
           <Plus size={18} />
           New Project
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {[
           { label: "Active Pipeline", value: `$${totalBudget.toLocaleString()}`, color: "text-blue-500", bg: "bg-blue-500/10", icon: FolderOpen },
           { label: "Total Collected", value: `$${totalCollected.toLocaleString()}`, color: "text-emerald-500", bg: "bg-emerald-500/10", icon: CheckCircle2 },
@@ -120,7 +120,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ projects, loading, onStatus
       </div>
       
       {/* Tabs */}
-      <div className="flex flex-wrap items-center gap-1 border-b border-border pb-px">
+      <div className="flex items-center gap-1 border-b border-border pb-px overflow-x-auto scrollbar-hide">
         {statuses.map((status) => {
           const count = status === "All Projects" 
             ? projects.length 
@@ -140,7 +140,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ projects, loading, onStatus
               {status !== "All Projects" && (
                 <span className={`w-2 h-2 rounded-full ${getStatusColor(status)} shadow-[0_0_8px_rgba(0,0,0,0.5)]`} />
               )}
-              <span className="text-[11px] font-bold uppercase tracking-[0.1em]">{status}</span>
+              <span className="text-[11px] font-bold uppercase tracking-[0.1em] whitespace-nowrap">{status}</span>
               <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-mono ${activeTab === status ? "bg-accent/20 text-accent" : "bg-white/5 text-muted"}`}>
                 {count.toString().padStart(2, '0')}
               </span>
