@@ -16,12 +16,14 @@ interface LeadsPipelineProps {
   leads: Lead[];
   onAddLeadClick: () => void;
   onStatusChange: (id: string, status: string) => void;
-  onNotesChange: (id: string, notes: string) => void;
+  onAddFollowUp: (id: string, note: string) => void;
+  onEditFollowUp: (leadId: string, entryId: string, note: string) => void;
+  onDeleteFollowUp: (leadId: string, entryId: string) => void;
   onDelete: (id: string) => void;
   onOrderLock: (lead: Lead) => void;
 }
 
-const LeadsPipeline: React.FC<LeadsPipelineProps> = ({ leads, onAddLeadClick, onStatusChange, onNotesChange, onDelete, onOrderLock }) => {
+const LeadsPipeline: React.FC<LeadsPipelineProps> = ({ leads, onAddLeadClick, onStatusChange, onAddFollowUp, onEditFollowUp, onDeleteFollowUp, onDelete, onOrderLock }) => {
   const statuses = ["New Leads", "In Conversation", "Follow Up", "Strong Lead", "Order Locked", "Not Interested"];
   const [activeTab, setActiveTab] = useState(statuses[0]);
   const [sourceFilter, setSourceFilter] = useState("All");
@@ -150,7 +152,9 @@ const LeadsPipeline: React.FC<LeadsPipelineProps> = ({ leads, onAddLeadClick, on
             key={lead._id} 
             lead={lead} 
             onStatusChange={onStatusChange} 
-            onNotesChange={onNotesChange}
+            onAddFollowUp={onAddFollowUp}
+            onEditFollowUp={onEditFollowUp}
+            onDeleteFollowUp={onDeleteFollowUp}
             onDelete={onDelete}
             onOrderLock={onOrderLock} 
           />

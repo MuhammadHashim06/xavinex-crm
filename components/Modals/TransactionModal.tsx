@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { X, ArrowUpRight, ArrowDownLeft } from "lucide-center";
-import { X as XIcon, ArrowUpRight as ArrowUpIcon, ArrowDownLeft as ArrowDownIcon } from "lucide-react";
+import { X, ArrowUpRight, ArrowDownLeft } from "lucide-react";
 
 interface TransactionModalProps {
   isOpen: boolean;
@@ -60,7 +59,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, onClose, wa
       <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={onClose}></div>
       <div className="relative w-full max-w-md bg-card border border-border rounded-[2rem] shadow-2xl p-8 animate-in zoom-in-95 duration-200">
         <button onClick={onClose} className="absolute top-6 right-6 text-muted hover:text-white transition-colors">
-          <XIcon size={20} />
+          <X size={20} />
         </button>
 
         <h2 className="text-2xl font-bold text-white mb-2">{type === "In" ? "Add to" : "Remove from"} {walletName}</h2>
@@ -73,14 +72,14 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, onClose, wa
               onClick={() => setType("In")}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold transition-all ${type === "In" ? "bg-emerald-500 text-white" : "text-muted hover:text-white"}`}
             >
-              <ArrowUpIcon size={14} /> Cash In
+              <ArrowUpRight size={14} /> Cash In
             </button>
             <button
               type="button"
               onClick={() => setType("Out")}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold transition-all ${type === "Out" ? "bg-rose-500 text-white" : "text-muted hover:text-white"}`}
             >
-              <ArrowDownIcon size={14} /> Cash Out
+              <ArrowDownLeft size={14} /> Cash Out
             </button>
           </div>
 

@@ -10,8 +10,9 @@ export async function PATCH(
     await connectDB();
     const { id } = await params;
     const body = await req.json();
-    console.log("PATCH Lead Request Body:", body);
-    const lead = await Lead.findByIdAndUpdate(id, { $set: body }, { returnDocument: "after" });
+    const update = body.update || body;
+    const options = body.options || {};
+    const lead = await Lead.findByIdAndUpdate(id, update, { ...options, new: true });
     console.log("Updated Lead:", lead);
     return NextResponse.json(lead);
   } catch (error) {

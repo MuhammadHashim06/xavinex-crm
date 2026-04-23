@@ -17,6 +17,7 @@ const AddLeadModal: React.FC<AddLeadModalProps> = ({ isOpen, onClose, onSubmit }
     email: "",
     fiverrUsername: "",
     orderId: "",
+    notes: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -29,6 +30,7 @@ const AddLeadModal: React.FC<AddLeadModalProps> = ({ isOpen, onClose, onSubmit }
       email: "",
       fiverrUsername: "",
       orderId: "",
+      notes: "",
     });
   };
 
@@ -113,6 +115,16 @@ const AddLeadModal: React.FC<AddLeadModalProps> = ({ isOpen, onClose, onSubmit }
             </div>
           </div>
         )}
+        
+        <div>
+          <label className="block text-xs font-bold text-muted uppercase mb-1.5">Initial Notes</label>
+          <textarea 
+            value={formData.notes}
+            onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+            placeholder="Any specific details or requirements..."
+            className="w-full bg-background border border-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-accent min-h-[80px] resize-none"
+          />
+        </div>
 
         <button type="submit" className="w-full bg-accent hover:bg-accent/90 text-white font-bold py-4 rounded-xl mt-4 transition-all glow-button">
           Create Lead

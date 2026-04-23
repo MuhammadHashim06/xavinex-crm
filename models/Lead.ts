@@ -12,7 +12,12 @@ const LeadSchema = new Schema({
   email: String,
   fiverrUsername: String,
   orderId: String,
-  followUpNotes: String, // Added field for follow-up descriptions
+  notes: String, // Initial notes from creation
+  followUpNotes: String, // Kept for backward compatibility
+  followUpHistory: [{
+    note: { type: String, required: true },
+    date: { type: Date, default: Date.now }
+  }],
   createdAt: { type: Date, default: Date.now }
 });
 

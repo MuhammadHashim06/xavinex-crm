@@ -34,7 +34,25 @@ interface ProjectsListProps {
 }
 
 const ProjectsList: React.FC<ProjectsListProps> = ({ projects, onStatusChange, onAddProjectClick, onAddPaymentClick, onViewSummaryClick, onEditProjectClick, onDeleteProject }) => {
-  const statuses = ["In Progress", "Completed", "On Hold", "Cancelled"];
+  const statuses = ["All Projects", "In Progress", "Completed", "On Hold", "Cancelled", "Unpaid"];
+  const [activeTab, setActiveTab] = React.useState(statuses[0]);
+
+  const filteredProjects = projects.filter(p => {
+    if (activeTab === "All Projects") return true;
+    if (activeTab === "Unpaid") return parseFloat(p.outstandingBalance || "0") > 0;
+    return p.status === activeTab;
+  });
+
+  const getStatusColor = (status: string) => {
+    switch(status) {
+      case "In Progress": return "bg-blue-500";
+      case "Completed": return "bg-emerald-500";
+      case "On Hold": return "bg-amber-500";
+      case "Cancelled": return "bg-rose-500";
+      case "Unpaid": return "bg-orange-500";
+      default: return "bg-zinc-600";
+    }
+  };
 
   const calculateProgress = (start: string, end: string) => {
     if (!start || !end) return 0;
@@ -91,9 +109,42 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ projects, onStatusChange, o
           );
         })}
       </div>
+      
+      {/* Tabs */}
+      <div className="flex flex-wrap items-center gap-1 border-b border-border pb-px">
+        {statuses.map((status) => {
+          const count = status === "All Projects" 
+            ? projects.length 
+            : status === "Unpaid"
+              ? projects.filter(p => parseFloat(p.outstandingBalance || "0") > 0).length
+              : projects.filter(p => p.status === status).length;
+          return (
+            <button
+              key={status}
+              onClick={() => setActiveTab(status)}
+              className={`flex items-center gap-2 px-4 py-3 border-b-2 transition-all relative group rounded-t-xl mb-[-1px] ${
+                activeTab === status 
+                  ? "border-accent text-accent bg-accent/10" 
+                  : "border-transparent text-muted hover:text-white hover:bg-white/5"
+              }`}
+            >
+              {status !== "All Projects" && (
+                <span className={`w-2 h-2 rounded-full ${getStatusColor(status)} shadow-[0_0_8px_rgba(0,0,0,0.5)]`} />
+              )}
+              <span className="text-[11px] font-bold uppercase tracking-[0.1em]">{status}</span>
+              <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-mono ${activeTab === status ? "bg-accent/20 text-accent" : "bg-white/5 text-muted"}`}>
+                {count.toString().padStart(2, '0')}
+              </span>
+              {activeTab === status && (
+                <div className="absolute inset-x-0 bottom-0 h-0.5 bg-accent shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
+              )}
+            </button>
+          );
+        })}
+      </div>
 
       <div className="grid grid-cols-1 gap-4">
-        {projects.length > 0 ? (
+        {filteredProjects.length > 0 ? (
           <div className="bg-card border border-border rounded-2xl overflow-hidden overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
@@ -107,7 +158,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ projects, onStatusChange, o
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {projects.map((project) => {
+                {filteredProjects.map((project) => {
                   const progress = calculateProgress(project.startDate, project.endDate);
                   return (
                     <tr key={project._id} className="hover:bg-white/[0.02] transition-colors group">
@@ -159,7 +210,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ projects, onStatusChange, o
                             project.status === "Cancelled" ? "text-rose-500" : "text-blue-500"
                           }`}
                         >
-                          {statuses.map(s => (
+                          {statuses.filter(s => s !== "All Projects" && s !== "Unpaid").map(s => (
                             <option key={s} value={s}>{s}</option>
                           ))}
                         </select>
@@ -196,9 +247,9 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ projects, onStatusChange, o
             </table>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-20 bg-card border border-dashed border-border rounded-2xl">
+          <div className="flex flex-col items-center justify-center py-20 bg-card border border-dashed border-border rounded-2xl opacity-50">
             <FolderOpen size={48} className="text-muted/20 mb-4" />
-            <p className="text-muted font-medium">No projects yet. Convert a strong lead to get started.</p>
+            <p className="text-muted font-medium">No projects found in this category.</p>
           </div>
         )}
       </div>

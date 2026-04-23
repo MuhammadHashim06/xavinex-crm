@@ -4,6 +4,7 @@ const PaymentSchema = new Schema({
   projectId: { type: Schema.Types.ObjectId, ref: "Project", required: true },
   clientName: { type: String, required: true },
   amount: { type: Number, required: true },
+  walletName: { type: String, required: true },
   date: { type: Date, default: Date.now },
   description: String,
   createdAt: { type: Date, default: Date.now }
