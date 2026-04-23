@@ -65,10 +65,10 @@ const LeadsPipeline: React.FC<LeadsPipelineProps> = ({ leads, loading, onAddLead
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white">Lead Pipeline</h1>
-          <p className="text-muted">Manage and track your potential clients.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white">Lead Pipeline</h1>
+          <p className="text-muted text-sm">Manage and track your potential clients.</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
           <div className="flex items-center gap-2 bg-card border border-border rounded-xl p-1">
             <div className="pl-2 text-muted">
               <Filter size={12} />
@@ -89,7 +89,7 @@ const LeadsPipeline: React.FC<LeadsPipelineProps> = ({ leads, loading, onAddLead
           </div>
           <button 
             onClick={onAddLeadClick}
-            className="px-5 py-2.5 bg-accent hover:bg-accent/90 text-white rounded-xl font-bold transition-all glow-button flex items-center gap-2"
+            className="px-5 py-2.5 bg-accent hover:bg-accent/90 text-white rounded-xl font-bold transition-all glow-button flex items-center justify-center gap-2"
           >
             <Plus size={18} />
             New Lead
@@ -98,7 +98,7 @@ const LeadsPipeline: React.FC<LeadsPipelineProps> = ({ leads, loading, onAddLead
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: "Total Leads", value: totalLeads, icon: Users, color: "text-blue-500", bg: "bg-blue-500/10" },
           { label: "Active Pursuits", value: activeLeads, icon: Target, color: "text-purple-500", bg: "bg-purple-500/10" },
@@ -121,7 +121,7 @@ const LeadsPipeline: React.FC<LeadsPipelineProps> = ({ leads, loading, onAddLead
       </div>
 
       {/* Tabs */}
-      <div className="flex flex-wrap items-center gap-1 border-b border-border pb-px">
+      <div className="flex items-center gap-1 border-b border-border pb-px overflow-x-auto scrollbar-hide">
         {statuses.map((status) => {
           const count = leads.filter(l => l.status === status && (sourceFilter === "All" || l.source === sourceFilter)).length;
           return (
@@ -135,7 +135,7 @@ const LeadsPipeline: React.FC<LeadsPipelineProps> = ({ leads, loading, onAddLead
               }`}
             >
               <span className={`w-2 h-2 rounded-full ${getStatusColor(status)} shadow-[0_0_8px_rgba(0,0,0,0.5)]`} />
-              <span className="text-[11px] font-bold uppercase tracking-[0.1em]">{status}</span>
+              <span className="text-[11px] font-bold uppercase tracking-[0.1em] whitespace-nowrap">{status}</span>
               <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-mono ${activeTab === status ? "bg-accent/20 text-accent" : "bg-white/5 text-muted"}`}>
                 {count.toString().padStart(2, '0')}
               </span>

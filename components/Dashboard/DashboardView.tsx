@@ -212,8 +212,8 @@ const DashboardView: React.FC<DashboardViewProps> = ({
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
-          <h1 className="text-3xl font-black text-white glow-text">Dashboard Overview</h1>
-          <p className="text-muted mt-1 font-medium">Live metrics and business performance analytics.</p>
+          <h1 className="text-2xl sm:text-3xl font-black text-white glow-text">Dashboard Overview</h1>
+          <p className="text-muted mt-1 font-medium text-sm">Live metrics and business performance analytics.</p>
         </div>
         <div className="flex items-center gap-3 w-full md:w-auto">
           <button 
@@ -227,7 +227,7 @@ const DashboardView: React.FC<DashboardViewProps> = ({
       </header>
       
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {[
           { label: "Total Leads", value: leads.length, icon: Users, color: "text-blue-500", bg: "bg-blue-500/10" },
           { label: "Monthly Revenue", value: `$${monthlyIncome.toLocaleString()}`, icon: DollarSign, color: "text-emerald-500", bg: "bg-emerald-500/10" },
